@@ -31,7 +31,7 @@
 			class="container mx-auto flex flex-col items-center justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48"
 		>
 			<h1
-				class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 via-red-500 to-lime-500 background-animate text-center"
+				class="typogra text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 via-red-500 to-lime-500 background-animate text-center"
 			>
 				Yay!
 			</h1>
@@ -54,7 +54,7 @@
 		</div>
 	</section>
 {:else}
-	<section class="flex flex-wrap lg:h-screen md:pt-24 justify-center">
+	<section class="flex flex-wrap lg:h-screen justify-center">
 		{#if submitting}
 			<svg
 				viewBox="0 0 200 200"
@@ -116,10 +116,10 @@
 				/>
 			</svg>{/if}
 		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8">
-			<div class="mx-auto max-w-lg text-center">
-				<h1 class="text-2xl font-bold sm:text-3xl">New event</h1>
+			<div class="mx-auto max-w-lg text-center md:text-left">
+				<h1 class="text-2xl sm:text-4xl typogra">New event</h1>
 
-				<p class="mt-4 text-zinc-500">
+				<p class="mt-4 text-zinc-300">
 					You need to fill in some basic details about your event. Experience tells that people can
 					get confused when they land on the "AAAask djkjkds" event and they usually don't know what
 					to expect.
@@ -128,7 +128,7 @@
 
 			<form
 				method="POST"
-				class="mx-auto mt-8 mb-0 max-w-md space-y-6 text-zinc-900 {submitting && `opacity-10`}"
+				class="mx-auto mt-12 max-w-lg text-center md:text-left space-y-6 text-zinc-900 {submitting && `opacity-10`}"
 				use:enhance={({ form, data, action, cancel }) => {
 					submitting = true;
 					return async ({ result, update }) => {
