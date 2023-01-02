@@ -18,10 +18,11 @@
 	$: getDayNum = () => {
 		return dayselection.map((d) => {
 			const diff = addDays(new Date(), d - today);
-			return getDate(diff);
+			//console.log(format(new Date(diff),"do"));
+			//return [format(diff, 'do'), format(diff, 'M')];
+			return diff;
 		});
 	};
-	//console.log($page.url.host)
 </script>
 
 {#if form?.success}
@@ -32,22 +33,22 @@
 			<h1
 				class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 via-red-500 to-lime-500 background-animate text-center"
 			>
-				Jop, máš to tam.
+				Yay!
 			</h1>
 			<div class="text-xl font-medium text-center flex">
-				Tvoje nová parádní událost je připravená. Bylo by dobrý tu adresu zkopírovat a poslat
-				kámošům, protože určitě zapomeneš jak si to pojmenoval a už to nikdy nenajdeš. Máme na to
-				tlačítko, ale Ctrl+V v mailu už musíš zmáčknout sám/sama.
+				New event is created and prepared for you and your frens. Best thing to do now is to copy
+				the address and share it - we do have a search, but believe it or not, some people forget
+				even the event name.
 			</div>
 			<div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:space-x-8">
 				<button
 					class="px-8 py-3 text-lg font-semibold  bg-lime-500 text-zinc-900 rounded-full"
-					on:click={handleClick}>Zkopíruj adresu</button
+					on:click={handleClick}>Copy to clipboard</button
 				>
 				<a
 					href={`https://${$page.url.host}/events/${form.url}`}
 					class="px-8 py-3 text-lg font-normal border  bg-zinc-100 text-zinc-900 border-zinc-300 rounded-full"
-					>Jdi na událost</a
+					>Go to the event page</a
 				>
 			</div>
 		</div>
@@ -116,11 +117,12 @@
 			</svg>{/if}
 		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8">
 			<div class="mx-auto max-w-lg text-center">
-				<h1 class="text-2xl font-bold sm:text-3xl">Založ novou událost!</h1>
+				<h1 class="text-2xl font-bold sm:text-3xl">New event</h1>
 
 				<p class="mt-4 text-zinc-500">
-					Potřebujem vědět nějaký základní věci, aby ostatní co se chtěj přihlásit věděli na co se
-					to jako hlásí.
+					You need to fill in some basic details about your event. Experience tells that people can
+					get confused when they land on the "AAAask djkjkds" event and they usually don't know what
+					to expect.
 				</p>
 			</div>
 
@@ -139,7 +141,7 @@
 				}}
 			>
 				<div class="flex flex-col space-y-2">
-					<label for="username" class="text-sm text-zinc-400">Tvoje jméno</label>
+					<label for="username" class="text-sm text-zinc-400">Your name</label>
 
 					<div>
 						<input
@@ -147,20 +149,20 @@
 							name="username"
 							value={$userNameStore}
 							class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl"
-							placeholder="takhle tě uvidí ostatní"
+							placeholder="that's how your frens see you"
 							required
 						/>
 					</div>
 				</div>
 
 				<div class="flex flex-col space-y-2">
-					<label for="eventname" class="text-sm text-zinc-400">Jméno události</label>
+					<label for="eventname" class="text-sm text-zinc-400">Event name</label>
 					<div>
 						<input
 							type="text"
 							name="eventname"
 							class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl"
-							placeholder="podle čeho ostatní poznaj kam jdou"
+							placeholder="something recognizable would be great"
 							autocomplete="off"
 							required
 						/>
@@ -169,7 +171,7 @@
 
 				<div>
 					<fieldset class="flex flex-col space-y-2">
-						<legend class="text-sm text-zinc-400">Každej</legend>
+						<legend class="text-sm text-zinc-400">Every</legend>
 						<div
 							class="inline-flex items-center justify-center p-2 rounded-md cursor-pointer w-full"
 						>
@@ -199,7 +201,7 @@
 								<label
 									for="frequencyChoice0"
 									class="px-4 py-2 rounded-l-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Den</label
+									>Day</label
 								>
 							</div>
 							<div>
@@ -216,7 +218,7 @@
 								<label
 									for="frequencyChoice1"
 									class="px-4 py-2 peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Tejden</label
+									>Week</label
 								>
 							</div>
 							<div>
@@ -232,7 +234,7 @@
 								<label
 									for="frequencyChoice2"
 									class="px-4 py-2 rounded-r-full bg-zinc-800 peer-checked:bg-lime-500 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Měsíc</label
+									>Month</label
 								>
 							</div>
 						</div>
@@ -241,8 +243,23 @@
 
 				<div>
 					<fieldset class="w-full">
-						<legend class="text-sm text-zinc-400 mb-2">Dny</legend>
+						<legend class="text-sm text-zinc-400 mb-2">Days</legend>
 						<div class="gap-4 flex justify-between" required>
+							<div class="flex flex-col">
+								<input
+									type="checkbox"
+									id="sun"
+									class="hidden peer"
+									name="day"
+									bind:group={dayselection}
+									value={0}
+								/>
+								<label
+									for="sun"
+									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+									>Sun</label
+								>
+							</div>
 							<div class="flex flex-col ">
 								<input
 									type="checkbox"
@@ -255,7 +272,7 @@
 								<label
 									for="mo"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Po</label
+									>Mo</label
 								>
 							</div>
 
@@ -271,7 +288,7 @@
 								<label
 									for="tue"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Út</label
+									>Tue</label
 								>
 							</div>
 
@@ -287,7 +304,7 @@
 								<label
 									for="wed"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>St</label
+									>We</label
 								>
 							</div>
 
@@ -303,7 +320,7 @@
 								<label
 									for="thu"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Čt</label
+									>Thu</label
 								>
 							</div>
 
@@ -319,7 +336,7 @@
 								<label
 									for="fri"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Pá</label
+									>Fri</label
 								>
 							</div>
 
@@ -335,23 +352,7 @@
 								<label
 									for="sat"
 									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>So</label
-								>
-							</div>
-
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="sun"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={0}
-								/>
-								<label
-									for="sun"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Ne</label
+									>Sat</label
 								>
 							</div>
 						</div>
@@ -360,7 +361,7 @@
 				{#if freqradio === 2}
 					<div>
 						<fieldset class="w-full">
-							<legend class="text-sm text-zinc-400 mb-2">Jak opakovat</legend>
+							<legend class="text-sm text-zinc-400 mb-2">On day or week number?</legend>
 							<div class="flex justify-center">
 								<div class="flex">
 									<input
@@ -374,16 +375,16 @@
 									<label
 										for="ptbydate"
 										class="px-4 py-1 rounded-2xl peer-checked:bg-lime-500 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-										><span class="font-bold">{getDayNum()}</span> každej měsíc
+										><span class="font-bold">{format(new Date(getDayNum()), 'do')}</span> day
 									</label>
-									<input type="hidden" name="dates" value={getDayNum()} />
+									<input type="hidden" name="dates" value={format(new Date(getDayNum()), 'd')} />
 								</div>
 								<div class="flex">
 									<input type="radio" class="hidden peer" id="ptbyweek" name="pattern" value={1} />
 									<label
 										for="ptbyweek"
 										class="px-4 py-1 rounded-2xl peer-checked:bg-lime-500 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-										><span class="font-bold">{getWeekOfMonth(new Date())}</span> tejden každej měsíc
+										>week <span class="font-bold">{getWeekOfMonth(new Date())}</span>
 									</label>
 									<input type="hidden" name="weeknum" value={getWeekOfMonth(new Date())} />
 								</div>
@@ -392,12 +393,12 @@
 					</div>
 				{/if}
 				<div class="flex flex-col space-y-2">
-					<label for="description" class="text-sm text-zinc-400">Popis</label>
+					<label for="description" class="text-sm text-zinc-400">Description</label>
 					<textarea
 						id="description"
 						name="description"
 						rows={3}
-						placeholder="nějakej popis, o co tam jako jde"
+						placeholder="more detailed description of the event"
 						class="w-full text-zinc-800 text-sm rounded-xl"
 						required
 					/>
@@ -405,19 +406,18 @@
 
 				<div class="flex items-center justify-between">
 					<p class="text-sm text-zinc-500">
-						<a href="/about" class="underline">Jak to funguje?</a>
+						<a href="/about" class="underline">How does it work?</a>
 					</p>
 
 					<button
 						class="inline-flex text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-lg"
-							><span class="text-xl mr-2 font-bold">* </span>
-						Založit
+						><span class="text-xl mr-2 font-bold">* </span>
+						Create
 					</button>
 				</div>
 			</form>
 		</div>
 
-		<div class="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2 md:p-12">
-		</div>
+		<div class="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2 md:p-12" />
 	</section>
 {/if}
