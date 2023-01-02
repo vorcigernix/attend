@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+
+body {
+    font-family: 'Noto Sans', sans-serif;
+    background-image: url('/grain.png'), url('/mesh.png');
+    background-blend-mode: overlay, normal;
+    background-repeat: repeat, no-repeat;
+    background-position: top left, bottom 5% right 5%;
+    background-size: 40%, 30%;
+    background-attachment: fixed;
+    @apply text-zinc-50 bg-zinc-900
+}
+
+.background-animate {
+    background-size: 400%;
+
+    -webkit-animation: LoadingAnimation 3s ease infinite;
+    -moz-animation: LoadingAnimation 3s ease infinite;
+    animation: LoadingAnimation 3s ease infinite;
+}
+
+@keyframes LoadingAnimation {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@tailwind utilities;

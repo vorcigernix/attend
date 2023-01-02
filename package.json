@@ -1,0 +1,33 @@
+{
+  "name": "jdu2",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "prettier --plugin-search-dir . --check .",
+    "format": "prettier --plugin-search-dir . --write ."
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "1.0.0",
+    "@sveltejs/kit": "1.0.1",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "prettier": "^2.8.1",
+    "prettier-plugin-svelte": "^2.9.0",
+    "rrule": "^2.7.1",
+    "simple-svelte-autocomplete": "^2.5.1",
+    "svelte": "^3.55.0",
+    "svelte-preprocess": "^5.0.0",
+    "tailwindcss": "^3.2.4",
+    "vite": "^4.0.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "@execution-machine/sdk": "^0.1.6",
+    "date-fns": "^2.29.3"
+  }
+}
