@@ -14,14 +14,14 @@
 				<a
 					href="/"
 					class="flex items-center px-4 -mb-1 border-b-2 border-transparent"
-					class:active={$page.url.pathname === '/'}>Domu</a
+					class:active={$page.url.pathname === '/'}>Home</a
 				>
 			</li>
 			<li class="flex">
 				<a
 					class:active={$page.url.pathname === '/about'}
 					href="/about"
-					class="flex items-center px-4 -mb-1 border-b-2 border-transparent">O co jde?</a
+					class="flex items-center px-4 -mb-1 border-b-2 border-transparent">About</a
 				>
 			</li>
 		</ul>

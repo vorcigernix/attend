@@ -15,7 +15,7 @@
 </script>
 
 <fieldset class="w-full space-y-1 text-zinc-100">
-	<label for="Search" class="hidden">Hledej</label>
+	<label for="Search" class="hidden">Search</label>
 	<div class="relative">
 		<span class="absolute inset-y-0 left-0 flex items-center pl-2">
 			<button type="button" title="search" class="p-1 focus:outline-none focus:ring">
@@ -39,7 +39,7 @@
 			type="text"
 			name="Search"
 			bind:value={searchTerm}
-			placeholder="Hledej..."
+			placeholder="Search..."
 			class="w-52 py-3 pl-10 text-sm rounded-md sm:w-auto bg-zinc-800 border border-transparent outline outline-offset-2 outline-zinc-900 shadow-sm  focus:outline-lime-500 focus:ring-2 focus:ring-lime-500"
 		/>
 		{#if searchTerm.length > 1}
