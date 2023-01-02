@@ -26,16 +26,16 @@
 </script>
 
 {#if form?.success}
-	<section class="py-6 lg:pt-24 text-zinc-50">
+	<section class="py-6 lg:pt-24 text-zinc-50 backdrop-blur min-h-screen  w-full">
 		<div
-			class="container mx-auto flex flex-col items-center justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48"
+			class="container mx-auto flex flex-col items-center md:items-start justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48"
 		>
 			<h1
-				class="typogra text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-lime-500 via-red-500 to-lime-500 background-animate text-center"
+				class="typogra text-4xl  text-center"
 			>
 				Yay!
 			</h1>
-			<div class="text-xl font-medium text-center flex">
+			<div class="text-xl font-medium text-center md:text-left flex">
 				New event is created and prepared for you and your frens. Best thing to do now is to copy
 				the address and share it - we do have a search, but believe it or not, some people forget
 				even the event name.
