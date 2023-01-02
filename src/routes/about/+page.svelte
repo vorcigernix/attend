@@ -1,64 +1,65 @@
 <section class=" text-zinc-50">
 	<div class="container flex flex-col justify-center p-3 mx-auto md:p-8 pt-24">
 		<p class="p-2 text-sm font-medium tracking-wider text-center uppercase">
-			Otázky a odpovědi bez Moravce
+			Questions. And some answers.
 		</p>
-		<h2 class="mb-12 text-4xl font-bold leading-none text-center sm:text-5xl">O co tady de?</h2>
+		<h2 class="mb-12 text-4xl font-bold leading-none text-center sm:text-5xl">
+			What is this about?
+		</h2>
 		<div
-			class="grid gap-10 md:gap-8 sm:p-3 md:grid-cols-2 lg:px-12 xl:px-32 rounded-2xl backdrop-blur bg-zinc-900/60"
+			class="grid gap-10 md:gap-8 sm:p-10 md:grid-cols-2 lg:px-12 xl:px-32 rounded-2xl backdrop-blur bg-zinc-900/90"
 		>
 			<div>
-				<h3 class="font-semibold">K čemu tahle stránka jako je?</h3>
+				<h3 class="font-semibold">So what is this about?</h3>
 				<p class="mt-1 text-zinc-200">
-					No tak já třeba chodim s kámošema pravidelně na florbal a potřebujem vědět jestli se
-					sejdem. Ale vlastně cokoliv děláš v nějaký partičce pravidelně, tak si můžeš domluvit
-					tady. Gangbang i nedělní mše, mě je to fakt jedno. Ale respektuj ostatní.
-				</p>
-				<p class="text-zinc-200">
-					Ideální bude, když se nejdřív domluvíte a jeden z vás tu akci založí. Každá akce má svůj
-					"permalink" - ten odkaz na kterém ta akce je už takovej bude vždycky. Ten stačí poslat
-					ostatním a je to.
+					I have a regular floorbal (I hear you, shame on you, it is a best game on the planet)
+					training with like 12 frens. We need to know if there is at least six of us coming, can't
+					play in less. So the information about attendance is kinda important to us. There are more
+					use cases - regular pub with frens, Sunday sermons, game parties. Basically everything
+					where you need to know if your frens are joining you on the event.
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">Jak to vzniklo?</h3>
+				<h3 class="font-semibold">Why have you created this app?</h3>
 				<p class="mt-1 text-zinc-200">
-					No tak existoval jeden nejmenovanej server Týmuj, kterýmu trvalo asi tak půl hodiny než
-					něco ukázal a ve finále se autor rozhodnul že takovuhle věc musí zpoplatnit. Což mě trochu
-					nasralo a rozhodnul sem se že něco takovýho napíšu za tejden taky (ve finále to trvalo 10
-					dní teda). Upřímně, napsat takhle jednoduchej seznam je mnohem složitější než jsem si
-					myslel, ale nějak si nemyslim že by se za to muselo platit.
+					All the apps we tried are either paid, overcomplicated or completely unreliable. So I
+					decided to invest a little of my time to build something more simple. I kinda
+					underestimated the effort to be honest, but I like what I built and I hope this would be
+					useful to the people with the same need.
+				</p>
+				<p />
+			</div>
+			<div>
+				<h3 class="font-semibold">I can't insert animated gifs...</h3>
+				<p class="mt-1 text-zinc-200">
+					Yes. This is built as a minimal product for the reason. If you really miss something
+					crucial for your gang,don't hesistate <a href="mailto:vorcigernix+feedback@gmail.com"
+						>to drop me line</a
+					>.
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">Jako dobrý, ale neumí to posílat animovný gify?</h3>
+				<h3 class="font-semibold">What is your business model?</h3>
 				<p class="mt-1 text-zinc-200">
-					Neumí, sorry. Neumí to spoustu věcí. A je to tak ok. Chtěl jsem to mít napsaný co nejdřív
-					aby nám to fungovalo. Chápu, že tam může bejt něco co je třeba super důležitý, tak klidně
-					napiš na "vorigernix+jdu" - normálně na gmailu.
+					I don't have any. Honestly, I am super lame wen it comes to money. You can support me at
+					adamsobotka.eth.
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">Kdy to zpoplatníš?</h3>
+				<h3 class="font-semibold">How do I log in?</h3>
 				<p class="mt-1 text-zinc-200">
-					Nikdy. Kdybys chtěl přispět, tak moje adresa je adamsobotka.eth. Jestli seš nějakej crypto
-					hater, tak si z toho nic nedělej, jsou horší věci. Třeba hlad v Africe nebo Tomio Okamura.
+					There is no authentication yet. I don't want to handle any personal information or
+					anything like that. I do have an idea based cryptography, but that will take some time to
+					implement.
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">Jak se přihlašuju?</h3>
+				<h3 class="font-semibold">Are you with FBI?</h3>
 				<p class="mt-1 text-zinc-200">
-					Ani autentikace, ani autorizace tady neni. Samotná aplikace o tobe defakto nic neukládá a
-					nic nekontroluje. To samozřejmě znamená, že pokud je tvůj kamarád idiot a napíše tvoje
-					jméno místo svojeho, tak ho to normálně pustí dál a může změnit jestli přijdeš nebo ne.
-				</p>
-			</div>
-			<div>
-				<h3 class="font-semibold">Kdo za timhle je?</h3>
-				<p class="mt-1 text-zinc-200">
-					No tak to nemůžu říct, ještěři hlídaj. Ale kdyby tě zajímalo něco o mě tak mrkni na <a
-						href="https://adamsobotka.deno.dev" class="font-bold text-lime-500">můj web</a
-					> tam je snad všechno důležitý.
+					Yes. Maybe. Can't share the details, lizards are watching. More details on me are on <a
+						href="https://adamsobotka.deno.dev"
+						class="font-bold text-lime-500">my website</a
+					>
 				</p>
 			</div>
 		</div>

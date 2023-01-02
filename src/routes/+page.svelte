@@ -4,9 +4,9 @@
 			<div
 				class="lg:flex-grow  lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center"
 			>
-				<h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
+				<h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white typogra">
 					Dude, 
-					<br class="hidden lg:inline-block" /><span class="text-lime-500">coming?</span>
+					<br class="hidden lg:inline-block" /><span class="text-lime-500">Repondez s'il vous plait.</span>
 				</h1>
 				<p class="mb-8 leading-relaxed">
 					Use this app to find out if your frens are joining you on the regular events.
@@ -14,12 +14,12 @@
 				<div class="flex justify-center">
 					<a
 						href="/new"
-						class="inline-flex items-center text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-sm md:text-lg"
+						class=" font-bold inline-flex items-center text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-sm md:text-base"
 						><span class="text-xl mr-2 font-bold">* </span>New</a
 					>
 					<a
 						href="/about"
-						class="ml-4 rounded-full inline-flex items-center text-gray-400 bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 hover:text-white text-sm md:text-lg"
+						class="font-bold ml-4 rounded-full inline-flex items-center text-gray-400 bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 hover:text-white text-sm md:text-base"
 						>About</a
 					>
 				</div>
@@ -28,7 +28,7 @@
 				<img
 					class="object-cover object-center rounded"
 					alt="hero"
-					src="party.svg"
+					src="relationship.svg"
 				/>
 			</div>
 		</div>
