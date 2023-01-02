@@ -5,8 +5,8 @@
 				class="lg:flex-grow  lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center"
 			>
 				<h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
-					Zjisti jestli se
-					<br class="hidden lg:inline-block" /><span class="text-lime-500">sejdete</span>
+					Dude, 
+					<br class="hidden lg:inline-block" /><span class="text-lime-500">coming?</span>
 				</h1>
 				<p class="mb-8 leading-relaxed">
 					Tahle aplikace slouží k vytvoření opakujících se akcí jako jsou například tréninky.
