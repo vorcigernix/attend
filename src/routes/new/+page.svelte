@@ -117,7 +117,7 @@
 			</svg>{/if}
 		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8">
 			<div class="mx-auto max-w-lg text-center md:text-left">
-				<h1 class="text-2xl sm:text-4xl typogra">New event</h1>
+				<h1 class="text-2xl sm:text-5xl typogra">New event</h1>
 
 				<p class="mt-4 text-zinc-300">
 					You need to fill in some basic details about your event. Experience tells that people can

@@ -34,8 +34,8 @@
 				<p class="mt-1 text-zinc-200">
 					Yes. This is built as a minimal product for the reason. If you really miss something
 					crucial for your gang,don't hesistate <a
-						class="typogra"
-						href="mailto:vorcigernix+feedback@gmail.com">to drop me line</a
+						class="typogra underline"
+						href="mailto:vorcigernix+feedback@gmail.com"> to drop me a line</a
 					>.
 				</p>
 			</div>
