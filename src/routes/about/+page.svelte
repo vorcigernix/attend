@@ -33,8 +33,9 @@
 				<h3 class="font-semibold">I can't insert animated gifs...</h3>
 				<p class="mt-1 text-zinc-200">
 					Yes. This is built as a minimal product for the reason. If you really miss something
-					crucial for your gang,don't hesistate <a class="typogra" href="mailto:vorcigernix+feedback@gmail.com"
-						>to drop me line</a
+					crucial for your gang,don't hesistate <a
+						class="typogra"
+						href="mailto:vorcigernix+feedback@gmail.com">to drop me line</a
 					>.
 				</p>
 			</div>
@@ -51,6 +52,15 @@
 					There is no authentication yet. I don't want to handle any personal information or
 					anything like that. I do have an idea based cryptography, but that will take some time to
 					implement.
+				</p>
+			</div>
+			<div>
+				<h3 class="font-semibold">Is it only for man, dude?</h3>
+				<p class="mt-1 text-zinc-200">
+					Nah. Sorry about that, no offense meant. Dude RSVP was like the first idea for name that
+					kinda survived. It definitely does not mean that I don't want people who identify
+					themselves differently here. Your gender/orientation/nationality/skin color is completely
+					your business unless you support Putin's bloody war on Ukraine.
 				</p>
 			</div>
 			<div>
