@@ -11,7 +11,7 @@
 
 	let submitting = false;
 
-	const frequency = ['Denně', 'Týdně', 'Měsíčně', 'Ročně'];
+	const frequency = ['Daily', 'Weekly', 'Monthly', 'Annually'];
 	const addOrReplace = (arr, newObj) => [
 		...arr.filter((o) => o.username !== newObj.username),
 		{ ...newObj }
@@ -53,15 +53,15 @@
 	<div
 		class="container flex flex-col justify-center p-4 mx-auto md:p-8 pt-24 lg:pt-32 items-center"
 	>
-		<h1 class="text-4xl leading-none sm:text-5xl">
+		<h1 class="text-4xl leading-none sm:text-5xl typogra">
 			{data.eventname}
 			<span class="text-lime-500">{data.author}</span>
 		</h1>
 		<span class="mt-8 text-lg">{data.description} </span>
 		<div class="text-xl mt-2 font-bold mb-12">
-			{frequency[data.freq]}, další je
+			{frequency[data.freq]}, next is
 			<span class=" text-lime-500"
-				>{new Date(data.nextevents[0]).toLocaleDateString('cs-CZ', {
+				>{new Date(data.nextevents[0]).toLocaleDateString('en-US', {
 					weekday: 'long',
 					year: 'numeric',
 					month: 'long',
@@ -87,8 +87,9 @@
 				</svg>
 			</div>
 			<div class="flex flex-col justify-center align-middle">
-				<p class="text-3xl font-semibold leading-none">{attendingCount}</p>
-				<p>příště jdou</p>
+				<span class="text-3xl font-semibold leading-none">{attendingCount}</span><span class=""
+					>Confirmed</span
+				>
 			</div>
 		</div>
 
@@ -140,7 +141,7 @@
 					}}
 				>
 					<input type="hidden" name="postdata" value={JSON.stringify(data)} />
-					<label for="username" class="text-sm text-zinc-400">Tvoje jméno</label>
+					<label for="username" class="text-sm text-zinc-400">Your name</label>
 					<div class="flex my-4">
 						<input
 							type="text"
@@ -151,7 +152,7 @@
 							required
 						/>
 					</div>
-					<label for="username" class="text-sm text-zinc-400">Jdu</label>
+					<label for="username" class="text-sm text-zinc-400">Confirm for:</label>
 					<fieldset>
 						<div class="flex my-4 justify-center gap-4 md:gap-6">
 							{#each data.nextevents as event}
@@ -176,9 +177,9 @@
 					<div>
 						<button
 							name="attending"
-							class=" mt-8 inline-block rounded-full items-center  bg-lime-500 px-5 py-3 font-bold text-zinc-900 hover:bg-lime-600"
+							class="mt-8 inline-block rounded-full items-center  bg-lime-500 px-5 py-3 font-bold text-zinc-900 hover:bg-lime-600"
 						>
-							Potvrdit
+							Confirm
 						</button>
 					</div>
 				</form>

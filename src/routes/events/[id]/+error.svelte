@@ -4,10 +4,9 @@
 			<h2 class="mb-8 font-extrabold text-9xl text-zinc-600">
 				<span class="sr-only">Error</span>404
 			</h2>
-			<p class="text-2xl font-semibold md:text-3xl">Už je to tady.</p>
+			<p class="text-2xl font-semibold md:text-3xl">Not found.</p>
 			<p class="mt-4 mb-8 text-zinc-400">
-				Zapoměl si odkaz a nevíš jak se to vlastně jmenovalo co. No každopádně, tady na tom odkazu
-				neni teda vůbec nic.
+				Or, actually, the app might be broken. Who knows.
 			</p>
 			<a
 				rel="noopener noreferrer"

@@ -13,7 +13,7 @@
 			<li class="flex">
 				<a
 					href="/"
-					class="flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold"
+					class="typogra text-xl flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold"
 					class:active={$page.url.pathname === '/'}>Home</a
 				>
 			</li>
@@ -21,7 +21,7 @@
 				<a
 					class:active={$page.url.pathname === '/about'}
 					href="/about"
-					class="flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold">About</a
+					class="typogra text-xl flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold">About</a
 				>
 			</li>
 		</ul>

@@ -31,7 +31,7 @@
 			class="container mx-auto flex flex-col items-center md:items-start justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48"
 		>
 			<h1
-				class="typogra text-4xl  text-center"
+				class="typogra text-4xl text-center"
 			>
 				Yay!
 			</h1>
@@ -47,7 +47,7 @@
 				>
 				<a
 					href={`https://${$page.url.host}/events/${form.url}`}
-					class="px-8 py-3 text-lg font-normal border  bg-zinc-100 text-zinc-900 border-zinc-300 rounded-full"
+					class="font-bold px-8 py-3 text-lg border  bg-zinc-100 text-zinc-900 border-zinc-300 rounded-full"
 					>Go to the event page</a
 				>
 			</div>
@@ -410,7 +410,7 @@
 					</p>
 
 					<button
-						class="inline-flex text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-lg"
+						class="font-bold inline-flex text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-lg"
 						><span class="text-xl mr-2 font-bold">* </span>
 						Create
 					</button>

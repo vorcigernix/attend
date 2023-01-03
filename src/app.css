@@ -2,7 +2,7 @@
 @tailwind components;
 
 body {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Quattrocento Sans', sans-serif;
     background-image: url('/grain.png'), url('/relationship.svg');
     background-blend-mode: overlay, normal;
     background-repeat: repeat, no-repeat;
@@ -21,7 +21,7 @@ body {
 }
 
 .typogra {
-    font-family: 'Forum', cursive;
+    font-family: 'Quattrocento', serif;
 }
 
 @keyframes LoadingAnimation {

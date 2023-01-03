@@ -3,7 +3,7 @@
 		<p class="p-2 text-sm font-medium tracking-wider text-center uppercase">
 			Questions. And some answers.
 		</p>
-		<h2 class="mb-12 text-4xl font-bold leading-none text-center sm:text-5xl">
+		<h2 class="mb-12 text-4xl font-bold leading-none text-center sm:text-5xl typogra">
 			What is this about?
 		</h2>
 		<div
@@ -33,7 +33,7 @@
 				<h3 class="font-semibold">I can't insert animated gifs...</h3>
 				<p class="mt-1 text-zinc-200">
 					Yes. This is built as a minimal product for the reason. If you really miss something
-					crucial for your gang,don't hesistate <a href="mailto:vorcigernix+feedback@gmail.com"
+					crucial for your gang,don't hesistate <a class="typogra" href="mailto:vorcigernix+feedback@gmail.com"
 						>to drop me line</a
 					>.
 				</p>
@@ -58,7 +58,7 @@
 				<p class="mt-1 text-zinc-200">
 					Yes. Maybe. Can't share the details, lizards are watching. More details on me are on <a
 						href="https://adamsobotka.deno.dev"
-						class="font-bold text-lime-500">my website</a
+						class="font-bold text-lime-500 typogra">my website</a
 					>
 				</p>
 			</div>
