@@ -35,7 +35,7 @@ function getDay(day) {
 }
 
 function getWeekDays(days, pattern) {
-    if (!days || days === [] || pattern === '0') return null;
+    if (!days || days == [] || pattern === '0') return null;
     return days.map((d) => getDay(Number(d)));
 }
 
