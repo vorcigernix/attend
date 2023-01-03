@@ -42,26 +42,35 @@
 			placeholder="Search..."
 			class="w-52 py-3 pl-10 text-sm rounded-md sm:w-auto bg-zinc-800 border border-transparent outline outline-offset-2 outline-zinc-900 shadow-sm  focus:outline-lime-500 focus:ring-2 focus:ring-lime-500"
 		/>
-		{#if searchTerm.length > 1}
+		{#if searchTerm.length > 0}
 			<div
 				class="absolute right-0 z-50 w-full md:w-64 bg-zinc-800 border border-zinc-900 rounded-md text-zinc-50 shadow-lg mt-2"
 			>
 				<ul class="p-2 space-y-1 overflow-auto max-h-64">
-					{#each filteredList as e (e.id)}
+					{#if filteredList.length > 1}
+						{#each filteredList as e (e.id)}
+							<li>
+								<a
+									on:click={() => {
+										searchTerm = '';
+									}}
+									class="flex flex-col md:flex-row items-center justify-between px-4 py-4 font-medium rounded-md hover:text-zinc-900 hover:bg-zinc-100 focus:bg-zinc-50"
+									href={`/events/${e.id}`}
+									><span>{e.eventname}</span><span
+										class="block rounded bg-black px-1.5 py-0.5 text-[10px] text-white"
+										>{e.author}</span
+									></a
+								>
+							</li>
+						{/each}
+					{:else}
 						<li>
-							<a
-								on:click={() => {
-									searchTerm = '';
-								}}
+							<span
 								class="flex flex-col md:flex-row items-center justify-between px-4 py-4 font-medium rounded-md hover:text-zinc-900 hover:bg-zinc-100 focus:bg-zinc-50"
-								href={`/events/${e.id}`}
-								><span>{e.eventname}</span><span
-									class="block rounded bg-black px-1.5 py-0.5 text-[10px] text-white"
-									>{e.author}</span
-								></a
-							>
+								><span>no results found</span>
+							</span>
 						</li>
-					{/each}
+					{/if}
 				</ul>
 			</div>
 		{/if}

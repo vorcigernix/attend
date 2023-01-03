@@ -15,7 +15,7 @@
 					<a
 						href="/new"
 						class=" font-bold inline-flex items-center text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-sm md:text-base"
-						><span class="text-xl mr-2 font-bold">* </span>New</a
+						>Create new RSVP</a
 					>
 					<a
 						href="/about"
