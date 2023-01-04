@@ -35,7 +35,9 @@
 					Yes. This is built as a minimal product for the reason. If you really miss something
 					crucial for your gang,don't hesistate <a
 						class="typogra underline"
-						href="mailto:vorcigernix+feedback@gmail.com"> to drop me a line</a
+						href="mailto:vorcigernix+feedback@gmail.com"
+					>
+						to drop me a line</a
 					>.
 				</p>
 			</div>
@@ -75,3 +77,30 @@
 		</div>
 	</div>
 </section>
+<footer class="px-4 py-8  text-gray-400">
+	<div
+		class="container flex flex-wrap items-center justify-center mx-auto space-y-4 sm:justify-between sm:space-y-0"
+	>
+		<div class="flex flex-row pr-3 space-x-4 sm:space-x-8">
+			<div
+				class="flex items-center justify-center flex-shrink-0 w-6 h-6 rounded-full bg-lime-400"
+			>
+			</div>
+			<ul class="flex flex-wrap items-center space-x-4 sm:space-x-8">
+				<li>
+					<a rel="noopener noreferrer" href="policy.pdf">Privacy Policy</a>
+				</li>
+			</ul>
+		</div>
+		<ul class="flex flex-wrap pl-3 space-x-4 sm:space-x-8">
+			<li>
+				<a rel="noopener noreferrer" href="https://app.commonground.cg/community/P0mI8SYrpO"
+					>CommonGround</a
+				>
+			</li>
+			<li>
+				<a rel="noopener noreferrer" href="https://twitter.com/vorcigernix">Twitter</a>
+			</li>
+		</ul>
+	</div>
+</footer>

@@ -38,6 +38,7 @@
 		<input
 			type="text"
 			name="Search"
+			autocomplete="off"
 			bind:value={searchTerm}
 			placeholder="Search..."
 			class="w-52 py-3 pl-10 text-sm rounded-md sm:w-auto bg-zinc-800 border border-transparent outline outline-offset-2 outline-zinc-900 shadow-sm  focus:outline-lime-500 focus:ring-2 focus:ring-lime-500"
@@ -47,7 +48,7 @@
 				class="absolute right-0 z-50 w-full md:w-64 bg-zinc-800 border border-zinc-900 rounded-md text-zinc-50 shadow-lg mt-2"
 			>
 				<ul class="p-2 space-y-1 overflow-auto max-h-64">
-					{#if filteredList.length > 1}
+					{#if filteredList.length > 0}
 						{#each filteredList as e (e.id)}
 							<li>
 								<a

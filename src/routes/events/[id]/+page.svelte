@@ -16,13 +16,13 @@
 		...arr.filter((o) => o.username !== newObj.username),
 		{ ...newObj }
 	];
-	console.log('data', data);
+	//console.log('data', data);
 	//this is horrible, but the new entry does not have attendance array
-	let currentAttendance = data.attendance
-		? data.attendance.filter((att) => {
+	let currentAttendance = data.oneoff
+		? data.attendance
+		: data.attendance.filter((att) => {
 				return att.dates && att.dates.includes(data.nextevents[0]);
-		  })
-		: [];
+		  });
 
 	console.log('attend', currentAttendance);
 
@@ -59,7 +59,7 @@
 		</h1>
 		<span class="mt-8 text-lg">{data.description} </span>
 		<div class="text-xl mt-2 font-bold mb-12">
-			{frequency[data.freq]}, next is
+			{frequency[data.freq] ? `${frequency[data.freq]}, next is` : `One-off event at `}
 			<span class=" text-lime-500"
 				>{new Date(data.nextevents[0]).toLocaleDateString('en-US', {
 					weekday: 'long',
@@ -67,7 +67,7 @@
 					month: 'long',
 					day: 'numeric'
 				})}</span
-			>
+			>{#if data.oneoff}&nbsp;{new Date(data.oneoff).toTimeString()}{/if}
 		</div>
 		<div class="flex p-4 space-x-4 rounded-lg md:space-x-6  text-zinc-100">
 			<div class="flex justify-center p-2 align-middle rounded-full sm:p-4 bg-lime-500">
@@ -125,7 +125,7 @@
 						submitting = true;
 						currentAttendance = addOrReplace(currentAttendance, {
 							username: data.get('username'),
-							dates: data.getAll('nextEventsChoice')
+							dates: data.getAll('nextEventsChoice') || null
 						});
 						pendingAttendance = data.getAll('nextEventsChoice');
 						return async ({ result, update }) => {
@@ -152,28 +152,30 @@
 							required
 						/>
 					</div>
-					<label for="username" class="text-sm text-zinc-400">Confirm for:</label>
-					<fieldset>
-						<div class="flex my-4 justify-center gap-4 md:gap-6">
-							{#each data.nextevents as event}
-								<div>
-									<input
-										type="checkbox"
-										id={format(new Date(event), 'dM')}
-										name="nextEventsChoice"
-										value={new Date(event).toJSON()}
-										checked={checkMyAttendance(new Date(event).toJSON())}
-										class="hidden peer"
-									/>
-									<label
-										for={format(new Date(event), 'dM')}
-										class="px-4 py-2 rounded-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-										>{format(new Date(event), 'd.M.')}</label
-									>
-								</div>
-							{/each}
-						</div>
-					</fieldset>
+					{#if !data.oneoff}
+						<label for="username" class="text-sm text-zinc-400">Confirm for:</label>
+						<fieldset>
+							<div class="flex my-4 justify-center gap-4 md:gap-6">
+								{#each data.nextevents as event}
+									<div>
+										<input
+											type="checkbox"
+											id={format(new Date(event), 'dM')}
+											name="nextEventsChoice"
+											value={new Date(event).toJSON()}
+											checked={checkMyAttendance(new Date(event).toJSON())}
+											class="hidden peer"
+										/>
+										<label
+											for={format(new Date(event), 'dM')}
+											class="px-4 py-2 rounded-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+											>{format(new Date(event), 'd.M.')}</label
+										>
+									</div>
+								{/each}
+							</div>
+						</fieldset>
+					{/if}
 					<div>
 						<button
 							name="attending"

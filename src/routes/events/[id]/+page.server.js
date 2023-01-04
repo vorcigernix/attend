@@ -63,6 +63,10 @@ export async function load({ params, parent }) {
         }
         if (!data) { throw error(404, 'Not found'); }
 
+        if ('oneoff' in data) {
+            return { ...data, nextevents: [data.oneoff] };
+        }
+
         const rule = new RRule({
             freq: getFreq(Number(data.freq)),
             dtstart: new Date(data.dtstart),
@@ -110,6 +114,7 @@ export const actions = {
                 author: postdata.author,
                 eventname: postdata.eventname,
                 freq: postdata.freq,
+                oneoff: postdata.oneoff,
                 interval: postdata.interval,
                 days: postdata.days,
                 pattern: postdata.pattern,

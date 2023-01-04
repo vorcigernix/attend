@@ -10,6 +10,7 @@
 	export let form;
 	let submitting = false;
 	let freqradio = 1;
+	let recurradio = 0;
 	let today = getDay(new Date());
 	let dayselection = [today];
 	async function handleClick() {
@@ -30,11 +31,7 @@
 		<div
 			class="container mx-auto flex flex-col items-center md:items-start justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48"
 		>
-			<h1
-				class="typogra text-4xl text-center"
-			>
-				Yay!
-			</h1>
+			<h1 class="typogra text-4xl text-center">Yay!</h1>
 			<div class="text-xl font-medium text-center md:text-left flex">
 				New event is created and prepared for you and your frens. Best thing to do now is to copy
 				the address and share it - we do have a search, but believe it or not, some people forget
@@ -128,7 +125,8 @@
 
 			<form
 				method="POST"
-				class="mx-auto mt-12 max-w-lg text-center md:text-left space-y-6 text-zinc-900 {submitting && `opacity-10`}"
+				class="mx-auto mt-12 max-w-lg text-center md:text-left space-y-6 text-zinc-900 {submitting &&
+					`opacity-10`}"
 				use:enhance={({ form, data, action, cancel }) => {
 					submitting = true;
 					return async ({ result, update }) => {
@@ -168,195 +166,246 @@
 						/>
 					</div>
 				</div>
-
-				<div>
-					<fieldset class="flex flex-col space-y-2">
-						<legend class="text-sm text-zinc-400">Every</legend>
-						<div
-							class="inline-flex items-center justify-center p-2 rounded-md cursor-pointer w-full"
+				<div class="inline-flex items-center justify-center p-2 rounded-md cursor-pointer w-full">
+					<div>
+						<input
+							type="radio"
+							id="repeatChoice0"
+							name="recurring"
+							bind:group={recurradio}
+							value={0}
+							class="hidden peer"
+							checked
+							required
+						/>
+						<label
+							for="repeatChoice0"
+							class="px-4 py-2 rounded-l-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+							>One-off</label
 						>
-							{#if freqradio != 0}
-								<input
-									type="text"
-									class="text-center border-zinc-200 text-sm shadow-sm rounded-2xl outline-none appearance-none w-10 h-10 spin-button-none mr-4"
-									name="interval"
-									value="1"
-									min="1"
-									step="1"
-									max="31"
-									required
-								/>
-							{/if}
-							<div>
-								<input
-									type="radio"
-									id="frequencyChoice0"
-									name="frequency"
-									bind:group={freqradio}
-									value={0}
-									checked
-									class="hidden peer"
-									required
-								/>
-								<label
-									for="frequencyChoice0"
-									class="px-4 py-2 rounded-l-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Day</label
-								>
-							</div>
-							<div>
-								<input
-									type="radio"
-									id="frequencyChoice1"
-									name="frequency"
-									bind:group={freqradio}
-									value={1}
-									checked
-									class="hidden peer"
-									required
-								/>
-								<label
-									for="frequencyChoice1"
-									class="px-4 py-2 peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Week</label
-								>
-							</div>
-							<div>
-								<input
-									type="radio"
-									id="frequencyChoice2"
-									name="frequency"
-									bind:group={freqradio}
-									value={2}
-									class="hidden peer"
-									required
-								/>
-								<label
-									for="frequencyChoice2"
-									class="px-4 py-2 rounded-r-full bg-zinc-800 peer-checked:bg-lime-500 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
-									>Month</label
-								>
-							</div>
-						</div>
-					</fieldset>
+					</div>
+					<div>
+						<input
+							type="radio"
+							id="repeatChoice1"
+							name="recurring"
+							bind:group={recurradio}
+							value={1}
+							class="hidden peer"
+							required
+						/>
+						<label
+							for="repeatChoice1"
+							class="px-4 py-2 rounded-r-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+							>Recurring</label
+						>
+					</div>
+				</div>
+				<div class="flex items-center justify-center">
+					{#if recurradio === 0}
+						<input
+							type="datetime-local"
+							name="oneoffdt"
+							class=" border-zinc-200 p-4 text-sm shadow-sm rounded-2xl accent-lime-500"
+							placeholder="select date and time of the event"
+							pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+							required
+						/>
+					{/if}
 				</div>
 
 				<div>
-					<fieldset class="w-full">
-						<legend class="text-sm text-zinc-400 mb-2">Days</legend>
-						<div class="gap-4 flex justify-between" required>
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="sun"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={0}
-								/>
-								<label
-									for="sun"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Sun</label
-								>
+					{#if recurradio === 1}
+						<fieldset class="flex flex-col space-y-2">
+							<legend class="text-sm text-zinc-400">Every</legend>
+							<div
+								class="inline-flex items-center justify-center p-2 rounded-md cursor-pointer w-full"
+							>
+								{#if freqradio != 0}
+									<input
+										type="text"
+										class="text-center border-zinc-200 text-sm shadow-sm rounded-2xl outline-none appearance-none w-10 h-10 spin-button-none mr-4"
+										name="interval"
+										value="1"
+										min="1"
+										step="1"
+										max="31"
+										required
+									/>
+								{/if}
+								<div>
+									<input
+										type="radio"
+										id="frequencyChoice0"
+										name="frequency"
+										bind:group={freqradio}
+										value={0}
+										checked
+										class="hidden peer"
+										required
+									/>
+									<label
+										for="frequencyChoice0"
+										class="px-4 py-2 rounded-l-full peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+										>Day</label
+									>
+								</div>
+								<div>
+									<input
+										type="radio"
+										id="frequencyChoice1"
+										name="frequency"
+										bind:group={freqradio}
+										value={1}
+										checked
+										class="hidden peer"
+										required
+									/>
+									<label
+										for="frequencyChoice1"
+										class="px-4 py-2 peer-checked:bg-lime-500 bg-zinc-800 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+										>Week</label
+									>
+								</div>
+								<div>
+									<input
+										type="radio"
+										id="frequencyChoice2"
+										name="frequency"
+										bind:group={freqradio}
+										value={2}
+										class="hidden peer"
+										required
+									/>
+									<label
+										for="frequencyChoice2"
+										class="px-4 rounded-r-full py-2 bg-zinc-800 peer-checked:bg-lime-500 peer-checked:text-zinc-900 text-zinc-50 cursor-pointer"
+										>Month</label
+									>
+								</div>
 							</div>
-							<div class="flex flex-col ">
-								<input
-									type="checkbox"
-									id="mo"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={1}
-								/>
-								<label
-									for="mo"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Mo</label
-								>
-							</div>
+						</fieldset>
+					{/if}
+				</div>
 
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="tue"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={2}
-								/>
-								<label
-									for="tue"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Tue</label
-								>
-							</div>
+				<div>
+					{#if recurradio === 1}
+						<fieldset class="w-full">
+							<legend class="text-sm text-zinc-400 mb-2">Days</legend>
+							<div class="gap-4 flex justify-between" required>
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="sun"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={0}
+									/>
+									<label
+										for="sun"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Sun</label
+									>
+								</div>
+								<div class="flex flex-col ">
+									<input
+										type="checkbox"
+										id="mo"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={1}
+									/>
+									<label
+										for="mo"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Mo</label
+									>
+								</div>
 
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="wed"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={3}
-								/>
-								<label
-									for="wed"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>We</label
-								>
-							</div>
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="tue"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={2}
+									/>
+									<label
+										for="tue"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Tue</label
+									>
+								</div>
 
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="thu"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={4}
-								/>
-								<label
-									for="thu"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Thu</label
-								>
-							</div>
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="wed"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={3}
+									/>
+									<label
+										for="wed"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>We</label
+									>
+								</div>
 
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="fri"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={5}
-								/>
-								<label
-									for="fri"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Fri</label
-								>
-							</div>
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="thu"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={4}
+									/>
+									<label
+										for="thu"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Thu</label
+									>
+								</div>
 
-							<div class="flex flex-col">
-								<input
-									type="checkbox"
-									id="sat"
-									class="hidden peer"
-									name="day"
-									bind:group={dayselection}
-									value={6}
-								/>
-								<label
-									for="sat"
-									class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
-									>Sat</label
-								>
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="fri"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={5}
+									/>
+									<label
+										for="fri"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Fri</label
+									>
+								</div>
+
+								<div class="flex flex-col">
+									<input
+										type="checkbox"
+										id="sat"
+										class="hidden peer"
+										name="day"
+										bind:group={dayselection}
+										value={6}
+									/>
+									<label
+										for="sat"
+										class="rounded-full w-8 h-8 justify-center items-center flex font-bold bg-zinc-900 text-zinc-50 cursor-pointer flex-grow p-2 text-center peer-checked:bg-lime-500 peer-checked:font-bold peer-checked:text-zinc-900"
+										>Sat</label
+									>
+								</div>
 							</div>
-						</div>
-					</fieldset>
+						</fieldset>
+					{/if}
 				</div>
 				{#if freqradio === 2}
 					<div>
@@ -411,7 +460,7 @@
 
 					<button
 						class="font-bold inline-flex text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-lg"
-						><span class="text-xl mr-2 font-bold">* </span>
+					>
 						Create
 					</button>
 				</div>

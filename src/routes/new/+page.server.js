@@ -18,6 +18,7 @@ export const actions = {
         id: uuid,
         author: data.get('username'),
         eventname: data.get('eventname'),
+        oneoff: data.get('oneoffdt') ? new Date(data.get('oneoffdt')).toUTCString() : null,
         freq: data.get('frequency'),
         interval: data.get('interval'),
         days: data.getAll('day'),
@@ -32,7 +33,7 @@ export const actions = {
     console.log(inputs);
     try {
       const res = await exmInstance.functions.write(functionId, inputs);
-      //console.log(res.status);
+      console.log(res.status);
       newEventStore.set(inputs);
       return { success: true, url: uuid };
     }

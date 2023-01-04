@@ -9,11 +9,11 @@
 
 <header class="p-4 text-zinc-100">
 	<div class="container flex justify-between h-16 mx-auto">
-		<ul class="items-stretch hidden space-x-3 lg:flex">
+		<ul class="items-center justify-start hidden space-x-3 lg:flex ">
 			<li class="flex">
 				<a
 					href="/"
-					class="typogra text-xl flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold"
+					class="text-lg flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold"
 					class:active={$page.url.pathname === '/'}>Home</a
 				>
 			</li>
@@ -21,7 +21,7 @@
 				<a
 					class:active={$page.url.pathname === '/about'}
 					href="/about"
-					class="typogra text-xl flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold">About</a
+					class="text-lg flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold">About</a
 				>
 			</li>
 		</ul>
