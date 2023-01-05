@@ -1,0 +1,107 @@
+<script>
+	import { writeDeviceKeyPair } from '$lib/indexedDBUtil.ts';
+	import { browser } from '$app/environment';
+	let qrkey = '';
+	async function writeKey() {
+		if (!browser) return;
+		try {
+			qrkey = await writeDeviceKeyPair();
+			console.log(qrkey);
+		} catch (e) {
+			console.error(e);
+		}
+		return;
+	}
+</script>
+
+<section class="text-zinc-50">
+	<div
+		class="container flex flex-col justify-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between"
+	>
+		<div
+			class="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
+		>
+			{#if !qrkey}
+				<img
+					src="Design.svg"
+					alt="illustration"
+					class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
+				/>
+			{:else}
+				<div class="flex flex-col justify-center items-center">
+					<img
+						src="Technologies.svg"
+						alt="illustration"
+						class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
+					/>
+					<div class="inline-flex items-center divide-x rounded-full bg-lime-400 text-zinc-800 divide-gray-700">
+						<a
+							download="dude_rsvp_key.txt"
+							href="data:application/json,{JSON.stringify(qrkey[2])}"
+							class="font-bold inline-flex items-center py-2 px-6 hover:bg-lime-600 text-sm md:text-base hover:rounded-l-full"
+						>
+							Download key backup
+						</a>
+						<a href="/about#auth" class="inline-flex items-center py-2 px-4 hover:bg-lime-600 hover:rounded-r-full">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="w-6 h-6"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+								/></svg
+							></a
+						>
+					</div>
+				</div>
+			{/if}
+		</div>
+		<div
+			class="flex flex-col justify-center p-6 text-center lg:max-w-md xl:max-w-lg lg:text-left backdrop-blur bg-black/20 rounded-3xl"
+		>
+			<h1 class="text-5xl font-bold leading-none sm:text-6xl typogra">
+				Create or
+				<span class="text-lime-400">restore</span> verification
+			</h1>
+			<p class="mt-6 mb-8 text-lg sm:mb-12">
+				Verification is super easy. You just click on the green button
+				<br class="hidden md:inline lg:hidden" />and you are done. We will send you recovery file -
+				don't fret, it is just a text file with your ID for an account recovery purposes.
+			</p>
+			<div
+				class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start"
+			>
+				<button
+					on:click|preventDefault={() => writeKey()}
+					class=" font-bold inline-flex items-center text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-sm md:text-base"
+					>Create verification</button
+				><button
+					class=" font-bold ml-4 rounded-full inline-flex items-center text-zinc-200 bg-zinc-800 border-0 py-2 px-6 focus:outline-none hover:bg-zinc-700 hover:text-zinc-50 text-sm md:text-base"
+					>Restore</button
+				>
+				<a href="/about#auth" class="ml-4 rounded-full inline-flex items-center py-2 px-2">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="w-6 h-6 text-zinc-200 hover:text-zinc-50"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+						/></svg
+					></a
+				>
+			</div>
+		</div>
+	</div>
+</section>

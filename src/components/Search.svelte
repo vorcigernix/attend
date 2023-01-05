@@ -14,7 +14,7 @@
 	);
 </script>
 
-<fieldset class="w-full space-y-1 text-zinc-100">
+<fieldset class="w-full space-y-1 text-zinc-50">
 	<label for="Search" class="hidden">Search</label>
 	<div class="relative">
 		<span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -58,7 +58,7 @@
 									class="flex flex-col md:flex-row items-center justify-between px-4 py-4 font-medium rounded-md hover:text-zinc-900 hover:bg-zinc-100 focus:bg-zinc-50"
 									href={`/events/${e.id}`}
 									><span>{e.eventname}</span><span
-										class="block rounded bg-black px-1.5 py-0.5 text-[10px] text-white"
+										class="block rounded bg-black px-1.5 py-0.5 text-[10px] text-zinc-50"
 										>{e.author}</span
 									></a
 								>

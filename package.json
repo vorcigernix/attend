@@ -20,7 +20,6 @@
     "prettier": "^2.8.1",
     "prettier-plugin-svelte": "^2.9.0",
     "rrule": "^2.7.1",
-    "simple-svelte-autocomplete": "^2.5.1",
     "svelte": "^3.55.0",
     "svelte-adapter-deno": "^0.8.2",
     "svelte-preprocess": "^5.0.0",
@@ -30,6 +29,7 @@
   "type": "module",
   "dependencies": {
     "@execution-machine/sdk": "^0.1.6",
+    "arweave": "^1.11.8",
     "date-fns": "^2.29.3"
   }
 }

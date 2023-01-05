@@ -1,10 +1,14 @@
+<script>
+	export const prerender = true;
+	export const csr = false;
+</script>
 <section class=" text-zinc-50">
 	<div class="container flex flex-col justify-center p-3 mx-auto md:p-8 pt-24">
 		<p class="p-2 text-sm font-medium tracking-wider text-center uppercase">
 			Questions. And some answers.
 		</p>
-		<h2 class="mb-12 text-4xl font-bold leading-none text-center sm:text-5xl typogra">
-			What is this about?
+		<h2 class="mb-12 text-5xl font-bold leading-none sm:text-6xl typogra text-center">
+			What is this <span class="text-lime-400">about</span>?
 		</h2>
 		<div
 			class="grid gap-10 md:gap-8 sm:p-10 md:grid-cols-2 lg:px-12 xl:px-32 rounded-2xl backdrop-blur bg-zinc-900/90"
@@ -77,7 +81,7 @@
 		</div>
 	</div>
 </section>
-<footer class="px-4 py-8  text-gray-400">
+<footer class="px-4 py-8  text-zinc-200">
 	<div
 		class="container flex flex-wrap items-center justify-center mx-auto space-y-4 sm:justify-between sm:space-y-0"
 	>

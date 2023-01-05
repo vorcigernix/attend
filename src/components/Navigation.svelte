@@ -7,7 +7,7 @@
 	export let pathname = '';
 </script>
 
-<header class="p-4 text-zinc-100">
+<header class="p-4 text-zinc-50">
 	<div class="container flex justify-between h-16 mx-auto">
 		<ul class="items-center justify-start hidden space-x-3 lg:flex ">
 			<li class="flex">
@@ -103,7 +103,7 @@
 		<a href="/about" class="p-4 lg:hidden">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				class="w-6 h-6 text-zinc-100"
+				class="w-6 h-6 text-zinc-50"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor"

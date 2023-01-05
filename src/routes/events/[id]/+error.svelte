@@ -5,7 +5,7 @@
 				<span class="sr-only">Error</span>404
 			</h2>
 			<p class="text-2xl font-semibold md:text-3xl">Not found.</p>
-			<p class="mt-4 mb-8 text-zinc-400">
+			<p class="mt-4 mb-8 text-zinc-200">
 				Or, actually, the app might be broken. Who knows.
 			</p>
 			<a

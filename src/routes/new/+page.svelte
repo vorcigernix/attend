@@ -2,12 +2,13 @@
 	import { getDay, getWeekOfMonth, format, addDays, getDate } from 'date-fns';
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { userNameStore } from '$lib/localStore.js';
+	import { userNameStore, userKeyStore } from '$lib/localStore.js';
 	import { draw } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	/** @type {import('./$types').ActionData} */
 	export let form;
+	console.log($userKeyStore);
 	let submitting = false;
 	let freqradio = 1;
 	let recurradio = 0;
@@ -139,7 +140,7 @@
 				}}
 			>
 				<div class="flex flex-col space-y-2">
-					<label for="username" class="text-sm text-zinc-400">Your name</label>
+					<label for="username" class="text-sm text-zinc-200">Your name</label>
 
 					<div>
 						<input
@@ -154,7 +155,7 @@
 				</div>
 
 				<div class="flex flex-col space-y-2">
-					<label for="eventname" class="text-sm text-zinc-400">Event name</label>
+					<label for="eventname" class="text-sm text-zinc-200">Event name</label>
 					<div>
 						<input
 							type="text"
@@ -217,7 +218,7 @@
 				<div>
 					{#if recurradio === 1}
 						<fieldset class="flex flex-col space-y-2">
-							<legend class="text-sm text-zinc-400">Every</legend>
+							<legend class="text-sm text-zinc-200">Every</legend>
 							<div
 								class="inline-flex items-center justify-center p-2 rounded-md cursor-pointer w-full"
 							>
@@ -291,7 +292,7 @@
 				<div>
 					{#if recurradio === 1}
 						<fieldset class="w-full">
-							<legend class="text-sm text-zinc-400 mb-2">Days</legend>
+							<legend class="text-sm text-zinc-200 mb-2">Days</legend>
 							<div class="gap-4 flex justify-between" required>
 								<div class="flex flex-col">
 									<input
@@ -410,7 +411,7 @@
 				{#if freqradio === 2}
 					<div>
 						<fieldset class="w-full">
-							<legend class="text-sm text-zinc-400 mb-2">On day or week number?</legend>
+							<legend class="text-sm text-zinc-200 mb-2">On day or week number?</legend>
 							<div class="flex justify-center">
 								<div class="flex">
 									<input
@@ -442,7 +443,7 @@
 					</div>
 				{/if}
 				<div class="flex flex-col space-y-2">
-					<label for="description" class="text-sm text-zinc-400">Description</label>
+					<label for="description" class="text-sm text-zinc-200">Description</label>
 					<textarea
 						id="description"
 						name="description"
