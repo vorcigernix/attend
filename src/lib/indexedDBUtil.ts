@@ -1,15 +1,43 @@
-import Arweave from "arweave";
-const DEVICE_IDB_IDENT = "RSVP_DEVICE_KEY_IDENT";
-const KEYPAIR_IDENT = "RSVP_DEVICE_KEY_PAIR" as "RSVP_DEVICE_KEY_PAIR";
-const arweave = Arweave.init({});
+const DEVICE_IDB_IDENT = "ATTND_DEVICE_KEY_IDENT";
+const KEYPAIR_IDENT = "ATTND_DEVICE_KEY_PAIR" as "ATTND_DEVICE_KEY_PAIR";
 
 type IDBKeyPairObject = {
   id: typeof KEYPAIR_IDENT;
   keyPair: CryptoKeyPair;
 };
 
-async function generateKeyPair(): Promise<CryptoKeyPair> {
-  return await window.crypto.subtle.generateKey(
+export async function generateAndWriteKeys() {
+  let keyPair = await window.crypto.subtle.generateKey(
+    {
+      name: "ECDSA",
+      namedCurve: "P-384",
+    },
+    true,
+    ["sign", "verify"],
+  );
+  const privateKey = await window.crypto.subtle.exportKey(
+    "jwk",
+    keyPair.privateKey,
+  );
+  const publicKey = await window.crypto.subtle.exportKey(
+    "jwk",
+    keyPair.publicKey,
+  );
+  const nonExportableKeyPairs = makeKeysNonExportable(privateKey, publicKey);
+  try {
+    writeKeyPair(await nonExportableKeyPairs);
+  } catch (e) {
+    console.log(e);
+    throw new Error(e);
+  }
+
+  return { priv: privateKey, pub: publicKey };
+}
+
+async function makeKeysNonExportable(jwkpriv, jwkpub) {
+  const priv: CryptoKey = await window.crypto.subtle.importKey(
+    "jwk",
+    jwkpriv,
     {
       name: "ECDSA",
       namedCurve: "P-384",
@@ -17,23 +45,55 @@ async function generateKeyPair(): Promise<CryptoKeyPair> {
     false,
     ["sign"],
   );
-}
-
-async function generateARJWT() {
-  return await arweave.wallets.generate();
-}
-
-async function generateARKeyPair(jwt): Promise<any> {
-  return await window.crypto.subtle.importKey(
+  const pub: CryptoKey = await window.crypto.subtle.importKey(
     "jwk",
-    jwt,
-    { //these are the algorithm options
-      name: "RSA-PSS",
-      hash: { name: "SHA-256" }, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+    jwkpub,
+    {
+      name: "ECDSA",
+      namedCurve: "P-384",
     },
-    false, //whether the key is extractable (i.e. can be used in exportKey)
-    ["sign"],
+    false,
+    ["verify"],
   );
+
+  return { privateKey: priv, publicKey: pub };
+}
+
+async function writeKeyPair(keyPair: CryptoKeyPair) {
+  const db = await getKeyPairDatabase();
+  const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
+  const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
+  const getRequest = objectStore.get(KEYPAIR_IDENT);
+  getRequest.onerror = (ev) => {
+    console.error("Error getting key object", ev);
+    throw (getRequest.error);
+  };
+
+  getRequest.onsuccess = async (ev) => {
+    let obj: IDBKeyPairObject = getRequest.result;
+    if (obj) {
+      console.log("Found existing device key pair in IDB");
+      return [obj.keyPair, true];
+    } else {
+      obj = {
+        id: KEYPAIR_IDENT,
+        keyPair,
+      };
+      const putTransaction = db.transaction(DEVICE_IDB_IDENT, "readwrite");
+      const objectStore = putTransaction.objectStore(DEVICE_IDB_IDENT);
+      const putRequest = objectStore.put(obj);
+      putRequest.onerror = (ev) => {
+        // ToDo: is indexeddb available e.g. in Firefox Private Windows?
+        // CLient would just fail connecting then.
+        console.error("Error putting key object", ev);
+        throw (putRequest.error);
+      };
+      putRequest.onsuccess = (ev) => {
+        console.log("New device key pair saved to IDB");
+        return [keyPair, false];
+      };
+    }
+  };
 }
 
 async function getKeyPairDatabase(): Promise<IDBDatabase> {
@@ -64,109 +124,34 @@ async function getKeyPairFromDB(
       console.error("Error getting key object", ev);
       reject(getRequest.error);
     };
-    getRequest.onsuccess = async (ev) => {
-      let obj: IDBKeyPairObject = getRequest.result;
-      if (obj) {
-        console.log("Found existing device key pair in IDB");
-        resolve([obj.keyPair, true]);
-      } else {
-        reject(
-          new Error(
-            "Key does not exist",
-          ),
-        );
-      }
-    };
-  });
-}
-
-async function storeKeyPair(
-  db: IDBDatabase,
-): Promise<[CryptoKeyPair, boolean, String]> {
-  return new Promise<[CryptoKeyPair, boolean, String]>((resolve, reject) => {
-    const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
-    const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
-    const getRequest = objectStore.get(KEYPAIR_IDENT);
-    getRequest.onerror = (ev) => {
-      console.error("Error getting key object", ev);
-      reject(getRequest.error);
-    };
     getRequest.onsuccess = async () => {
       let obj: IDBKeyPairObject = getRequest.result;
       if (obj) {
-        console.error("Found existing device key pair, not overwriting");
-        resolve([obj.keyPair, true, "Validation token already exist"]);
+        resolve([obj.keyPair, true]);
       } else {
-        const arjwt = await generateARJWT();
-        const keyPair = await generateARKeyPair(arjwt);
-        obj = {
-          id: KEYPAIR_IDENT,
-          keyPair,
-        };
-        const putTransaction = db.transaction(DEVICE_IDB_IDENT, "readwrite");
-        const objectStore = putTransaction.objectStore(DEVICE_IDB_IDENT);
-        const putRequest = objectStore.put(obj);
-        putRequest.onerror = (ev) => {
-          // ToDo: is indexeddb available e.g. in Firefox Private Windows?
-          // Client would just fail connecting then.
-          console.error("Error putting key object", ev);
-          reject(putRequest.error);
-        };
-        putRequest.onsuccess = () => {
-          console.log("New device key pair saved to IDB");
-          resolve([keyPair, false, JSON.stringify(arjwt)]);
-        };
+        console.error(getRequest.error);
+        reject(getRequest.error);
       }
     };
   });
 }
 
-let keyPairPromise: Promise<[CryptoKeyPair, boolean]> | undefined;
-export async function getDeviceKeyPair(): Promise<[CryptoKeyPair, boolean]> {
-  if (!keyPairPromise) {
-    keyPairPromise = new Promise<[CryptoKeyPair, boolean]>(
-      async (resolve, reject) => {
-        try {
-          const db = await getKeyPairDatabase();
-          resolve(await getKeyPairFromDB(db));
-        } catch (e) {
-          try {
-            // indexeddb not available?
-            const keyPair = await generateKeyPair();
-            console.error(
-              `Indexeddb for key pair storage not accessible. Ignore this error if this is a Firefox Private Tab.`,
-            );
-            resolve([keyPair, true]);
-          } catch (e) {
-            reject(
-              new Error(
-                "Error generating device keypair - this is probably a browser issue",
-              ),
-            );
-          }
-        }
-      },
-    );
-  }
-
+export async function getDeviceKeyPair(
+  create: boolean,
+): Promise<[CryptoKeyPair, boolean]> {
+  let keyPairPromise = new Promise<[CryptoKeyPair, boolean]>(
+    async (resolve, reject) => {
+      try {
+        const db = await getKeyPairDatabase();
+        resolve(await getKeyPairFromDB(db));
+      } catch (e) {
+        reject(
+          new Error(
+            "Error generating device keypair - this is probably a browser issue",
+          ),
+        );
+      }
+    },
+  );
   return keyPairPromise;
-}
-
-export async function writeDeviceKeyPair() {
-  if (!keyPairPromise) {
-    return new Promise<[CryptoKeyPair, boolean, String]>(
-      async (resolve, reject) => {
-        try {
-          const db = await getKeyPairDatabase();
-          resolve(await storeKeyPair(db));
-        } catch (e) {
-          reject(
-            new Error(
-              "Error writing device keypair - this is probably a browser issue",
-            ),
-          );
-        }
-      },
-    );
-  } else return keyPairPromise;
 }

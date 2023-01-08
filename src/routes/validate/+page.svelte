@@ -1,12 +1,16 @@
 <script>
-	import { writeDeviceKeyPair } from '$lib/indexedDBUtil.ts';
+	import { generateAndWriteKeys } from '$lib/indexedDBUtil.ts';
 	import { browser } from '$app/environment';
-	let qrkey = '';
+    //import { userNameStore } from '$lib/localStore.js';
+	let eckey = null;
 	async function writeKey() {
 		if (!browser) return;
 		try {
-			qrkey = await writeDeviceKeyPair();
-			console.log(qrkey);
+			eckey = await generateAndWriteKeys();
+			let enc = new TextEncoder();
+			eckey = enc.encode(JSON.stringify(eckey));
+			//let dec = new TextDecoder();
+			//console.log(dec.decode(eckey));
 		} catch (e) {
 			console.error(e);
 		}
@@ -21,7 +25,7 @@
 		<div
 			class="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
 		>
-			{#if !qrkey}
+			{#if !eckey}
 				<img
 					src="Design.svg"
 					alt="illustration"
@@ -34,30 +38,16 @@
 						alt="illustration"
 						class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
 					/>
-					<div class="inline-flex items-center divide-x rounded-full bg-lime-400 text-zinc-800 divide-gray-700">
+					<div
+						class="inline-flex items-center divide-x rounded-full bg-lime-400 text-zinc-800 divide-gray-700"
+					>
 						<a
-							download="dude_rsvp_key.txt"
-							href="data:application/json,{JSON.stringify(qrkey[2])}"
-							class="font-bold inline-flex items-center py-2 px-6 hover:bg-lime-600 text-sm md:text-base hover:rounded-l-full"
+							download="dude_rsvp.key"
+							href="data:application/json,{JSON.stringify(eckey)}"
+							class="font-bold inline-flex items-center py-2 px-6 hover:bg-lime-600 text-sm md:text-base hover:rounded-full"
 						>
 							Download key backup
 						</a>
-						<a href="/about#auth" class="inline-flex items-center py-2 px-4 hover:bg-lime-600 hover:rounded-r-full">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="w-6 h-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								stroke-width="2"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-								/></svg
-							></a
-						>
 					</div>
 				</div>
 			{/if}
@@ -69,10 +59,24 @@
 				Create or
 				<span class="text-lime-400">restore</span> verification
 			</h1>
+			<div class="flex flex-col space-y-2 mt-4">
+				<label for="username" class="text-sm text-zinc-200">Your name/Nickname</label>
+
+				<div>
+					<input
+						type="text"
+						name="username"
+						class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl text-zinc-900"
+						placeholder="that'd be stored and used further on"
+						required
+					/>
+				</div>
+			</div>
 			<p class="mt-6 mb-8 text-lg sm:mb-12">
 				Verification is super easy. You just click on the green button
-				<br class="hidden md:inline lg:hidden" />and you are done. We will send you recovery file -
-				don't fret, it is just a text file with your ID for an account recovery purposes.
+				<br class="hidden md:inline lg:hidden" />and you are done. When the verification key is
+				generated, you can download a recovery file that later serve to restore your account on any
+				device.
 			</p>
 			<div
 				class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start"

@@ -17,6 +17,6 @@ if (browser) {
         localStorage.setItem('username', JSON.stringify(value))
     );
 
-    userKeyStore.update(async () => await getDeviceKeyPair());
+    userKeyStore.update(async () => await getDeviceKeyPair(false));
 
 }
