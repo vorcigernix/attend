@@ -6,7 +6,7 @@ type IDBKeyPairObject = {
   keyPair: CryptoKeyPair;
 };
 
-export async function generateAndWriteKeys() {
+export async function generateAndWriteKeys(name: String) {
   let keyPair = await window.crypto.subtle.generateKey(
     {
       name: "ECDSA",
@@ -23,7 +23,11 @@ export async function generateAndWriteKeys() {
     "jwk",
     keyPair.publicKey,
   );
-  const nonExportableKeyPairs = makeKeysNonExportable(privateKey, publicKey);
+  const nonExportableKeyPairs = makeKeysNonExportable(
+    privateKey,
+    publicKey,
+    name,
+  );
   try {
     writeKeyPair(await nonExportableKeyPairs);
   } catch (e) {
@@ -34,7 +38,9 @@ export async function generateAndWriteKeys() {
   return { priv: privateKey, pub: publicKey };
 }
 
-async function makeKeysNonExportable(jwkpriv, jwkpub) {
+async function makeKeysNonExportable(jwkpriv, jwkpub, nickname) {
+  jwkpriv = { nickname: nickname, ...jwkpriv };
+  jwkpub = { nickname: nickname, ...jwkpub };
   const priv: CryptoKey = await window.crypto.subtle.importKey(
     "jwk",
     jwkpriv,

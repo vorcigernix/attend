@@ -2,11 +2,12 @@
 	import { generateAndWriteKeys } from '$lib/indexedDBUtil.ts';
 	import { browser } from '$app/environment';
     //import { userNameStore } from '$lib/localStore.js';
+	let name =""
 	let eckey = null;
 	async function writeKey() {
-		if (!browser) return;
+		if (!browser || name==="") return;
 		try {
-			eckey = await generateAndWriteKeys();
+			eckey = await generateAndWriteKeys(name);
 			let enc = new TextEncoder();
 			eckey = enc.encode(JSON.stringify(eckey));
 			//let dec = new TextDecoder();
@@ -66,6 +67,7 @@
 					<input
 						type="text"
 						name="username"
+						bind:value={name}
 						class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl text-zinc-900"
 						placeholder="that'd be stored and used further on"
 						required
