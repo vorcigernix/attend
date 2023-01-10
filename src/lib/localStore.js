@@ -8,14 +8,14 @@ let userkeystore;
 
 if (browser) {
     userkeystore = await getKeyAndSignature() || null;
-    console.log(userkeystore);
+    //console.log(userkeystore);
     //OMG, sorry if you read this
     console.log(await checkLocally(userkeystore[0], userkeystore[1], userkeystore[2]));
 
 
 }
 
-async function check(publicKey, data, signature) {
+async function check(publicKey, signature, data) {
     const response = await fetch('/checkSignature', {
         method: 'POST',
         body: JSON.stringify({ data, signature }),
@@ -28,10 +28,11 @@ async function check(publicKey, data, signature) {
     return await response.json();
 }
 
-async function checkLocally(publicKey, data, signature) {
+async function checkLocally(publicKey, signature, data) {
     //console.log(publicKey);
     const encoded = new TextEncoder().encode(data);
-    return await window.crypto.subtle.verify(
+    //const sign = new TextEncoder().encode(signature);
+    return await crypto.subtle.verify(
         {
             name: "ECDSA",
             hash: { name: "SHA-384" },

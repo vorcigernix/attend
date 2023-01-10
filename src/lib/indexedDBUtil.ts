@@ -33,9 +33,9 @@ export async function generateAndWriteKeys(name: string) {
   const signature = await window.crypto.subtle.sign(
     {
       name: "ECDSA",
-      hash: "SHA-256", //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+      hash: "SHA-384",
     },
-    keyPair.privateKey, // The private key you want to use
+    keyPair.privateKey,
     new TextEncoder().encode(name),
   );
   try {
