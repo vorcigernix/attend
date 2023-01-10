@@ -134,8 +134,8 @@ async function getKeyPairDatabase(): Promise<IDBDatabase> {
 
 async function getDbKeyAndSignature(
   db: IDBDatabase,
-): Promise<[CryptoKey, ArrayBuffer, boolean]> {
-  return new Promise<[CryptoKey, ArrayBuffer, boolean]>((resolve, reject) => {
+): Promise<[CryptoKey, ArrayBuffer, String]> {
+  return new Promise<[CryptoKey, ArrayBuffer, String]>((resolve, reject) => {
     const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
     const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
     const getRequest = objectStore.get(KEYPAIR_IDENT);
@@ -147,7 +147,7 @@ async function getDbKeyAndSignature(
       //console.log(getRequest.result);
       let obj: IDBKeyPairObject = getRequest.result;
       if (obj) {
-        resolve([obj.keyPair.publicKey, obj.signature, true]);
+        resolve([obj.keyPair.publicKey, obj.signature, obj.name]);
       } else {
         console.error("Object misformatted", getRequest.error);
         reject(getRequest.error);
@@ -157,9 +157,9 @@ async function getDbKeyAndSignature(
 }
 
 export async function getKeyAndSignature(): Promise<
-  [CryptoKey, ArrayBuffer, boolean]
+  [CryptoKey, ArrayBuffer, String]
 > {
-  return new Promise<[CryptoKey, ArrayBuffer, boolean]>(
+  return new Promise<[CryptoKey, ArrayBuffer, String]>(
     async (resolve, reject) => {
       try {
         const db = await getKeyPairDatabase();
