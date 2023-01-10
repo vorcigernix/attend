@@ -2,13 +2,18 @@
 	import { getDay, getWeekOfMonth, format, addDays, getDate } from 'date-fns';
 	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
-	import { userNameStore, userKeyStore } from '$lib/localStore.js';
+	import { userInfo } from '$lib/localStore.js';
 	import { draw } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
+	const customProperties = new WeakMap();
 	/** @type {import('./$types').ActionData} */
 	export let form;
-	console.log($userKeyStore);
+	async function logKeystore() {
+		const _keystore = await $userInfo;
+		if (_keystore) console.log(_keystore);
+	}
+	logKeystore();
 	let submitting = false;
 	let freqradio = 1;
 	let recurradio = 0;
@@ -132,7 +137,7 @@
 					submitting = true;
 					return async ({ result, update }) => {
 						if (result.type === 'success') {
-							$userNameStore = data.get('username');
+							//$userNameStore = data.get('username');
 							form.reset();
 						}
 						update();
@@ -146,7 +151,7 @@
 						<input
 							type="text"
 							name="username"
-							value={$userNameStore}
+							value='userName'
 							class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl"
 							placeholder="that's how your frens see you"
 							required

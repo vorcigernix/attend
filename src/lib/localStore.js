@@ -1,22 +1,27 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
-import { getDeviceKeyPair } from "$lib/indexedDBUtil.ts";
+import { getKeyAndSignature } from "$lib/indexedDBUtil";
 
-let username;
+export const newEventStore = writable();
+export const userInfo = writable();
+let userkeystore;
 
 if (browser) {
-    username = JSON.parse(localStorage.getItem('username')) || "";
+    userkeystore = await getKeyAndSignature() || null;
+    console.log(userkeystore);
+    //console.log(await check(userKeyStore.keyPair.publicKey, userKeyStore.name, userKeyStore.signature));
+
+
 }
 
-export const userNameStore = writable(username);
-export const newEventStore = writable();
-export const userKeyStore = writable();
+async function check(publicKey, data, signature) {
+    const response = await fetch('/checkSignature', {
+        method: 'POST',
+        body: JSON.stringify({ a, b }),
+        headers: {
+            'content-type': 'application/json'
+        }
+    });
 
-if (browser) {
-    userNameStore.subscribe((value) =>
-        localStorage.setItem('username', JSON.stringify(value))
-    );
-
-    userKeyStore.update(async () => await getDeviceKeyPair(false));
-
+    return await response.json();
 }

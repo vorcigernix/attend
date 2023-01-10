@@ -4,9 +4,12 @@ const KEYPAIR_IDENT = "ATTND_DEVICE_KEY_PAIR" as "ATTND_DEVICE_KEY_PAIR";
 type IDBKeyPairObject = {
   id: typeof KEYPAIR_IDENT;
   keyPair: CryptoKeyPair;
+  name: String;
+  signature: ArrayBuffer;
 };
 
-export async function generateAndWriteKeys(name: String) {
+export async function generateAndWriteKeys(name: string) {
+  //console.log(name);
   let keyPair = await window.crypto.subtle.generateKey(
     {
       name: "ECDSA",
@@ -26,22 +29,27 @@ export async function generateAndWriteKeys(name: String) {
   const nonExportableKeyPairs = makeKeysNonExportable(
     privateKey,
     publicKey,
-    name,
+  );
+  const signature = await window.crypto.subtle.sign(
+    {
+      name: "ECDSA",
+      hash: "SHA-256", //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
+    },
+    keyPair.privateKey, // The private key you want to use
+    new TextEncoder().encode(name),
   );
   try {
-    writeKeyPair(await nonExportableKeyPairs);
+    writeKeyPair(await nonExportableKeyPairs, name, signature);
   } catch (e) {
     console.log(e);
     throw new Error(e);
   }
 
-  return { priv: privateKey, pub: publicKey };
+  return { priv: privateKey, pub: publicKey, nickname: name };
 }
 
-async function makeKeysNonExportable(jwkpriv, jwkpub, nickname) {
-  jwkpriv = { nickname: nickname, ...jwkpriv };
-  jwkpub = { nickname: nickname, ...jwkpub };
-  const priv: CryptoKey = await window.crypto.subtle.importKey(
+async function makeKeysNonExportable(jwkpriv, jwkpub) {
+  let priv: CryptoKey = await window.crypto.subtle.importKey(
     "jwk",
     jwkpriv,
     {
@@ -51,7 +59,7 @@ async function makeKeysNonExportable(jwkpriv, jwkpub, nickname) {
     false,
     ["sign"],
   );
-  const pub: CryptoKey = await window.crypto.subtle.importKey(
+  let pub: CryptoKey = await window.crypto.subtle.importKey(
     "jwk",
     jwkpub,
     {
@@ -61,11 +69,14 @@ async function makeKeysNonExportable(jwkpriv, jwkpub, nickname) {
     false,
     ["verify"],
   );
-
   return { privateKey: priv, publicKey: pub };
 }
 
-async function writeKeyPair(keyPair: CryptoKeyPair) {
+async function writeKeyPair(
+  keyPair: CryptoKeyPair,
+  name: String,
+  signature: ArrayBuffer,
+) {
   const db = await getKeyPairDatabase();
   const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
   const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
@@ -84,6 +95,8 @@ async function writeKeyPair(keyPair: CryptoKeyPair) {
       obj = {
         id: KEYPAIR_IDENT,
         keyPair,
+        name,
+        signature,
       };
       const putTransaction = db.transaction(DEVICE_IDB_IDENT, "readwrite");
       const objectStore = putTransaction.objectStore(DEVICE_IDB_IDENT);
@@ -119,10 +132,10 @@ async function getKeyPairDatabase(): Promise<IDBDatabase> {
   });
 }
 
-async function getKeyPairFromDB(
+async function getDbKeyAndSignature(
   db: IDBDatabase,
-): Promise<[CryptoKeyPair, boolean]> {
-  return new Promise<[CryptoKeyPair, boolean]>((resolve, reject) => {
+): Promise<[CryptoKey, ArrayBuffer, boolean]> {
+  return new Promise<[CryptoKey, ArrayBuffer, boolean]>((resolve, reject) => {
     const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
     const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
     const getRequest = objectStore.get(KEYPAIR_IDENT);
@@ -131,33 +144,29 @@ async function getKeyPairFromDB(
       reject(getRequest.error);
     };
     getRequest.onsuccess = async () => {
+      //console.log(getRequest.result);
       let obj: IDBKeyPairObject = getRequest.result;
       if (obj) {
-        resolve([obj.keyPair, true]);
+        resolve([obj.keyPair.publicKey, obj.signature, true]);
       } else {
-        console.error(getRequest.error);
+        console.error("Object misformatted", getRequest.error);
         reject(getRequest.error);
       }
     };
   });
 }
 
-export async function getDeviceKeyPair(
-  create: boolean,
-): Promise<[CryptoKeyPair, boolean]> {
-  let keyPairPromise = new Promise<[CryptoKeyPair, boolean]>(
+export async function getKeyAndSignature(): Promise<
+  [CryptoKey, ArrayBuffer, boolean]
+> {
+  return new Promise<[CryptoKey, ArrayBuffer, boolean]>(
     async (resolve, reject) => {
       try {
         const db = await getKeyPairDatabase();
-        resolve(await getKeyPairFromDB(db));
+        resolve(await getDbKeyAndSignature(db));
       } catch (e) {
-        reject(
-          new Error(
-            "Error generating device keypair - this is probably a browser issue",
-          ),
-        );
+        reject(console.info("validation not set"));
       }
     },
   );
-  return keyPairPromise;
 }

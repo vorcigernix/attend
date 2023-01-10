@@ -1,11 +1,11 @@
 <script>
-	import { generateAndWriteKeys } from '$lib/indexedDBUtil.ts';
+	import { generateAndWriteKeys } from '$lib/indexedDBUtil';
 	import { browser } from '$app/environment';
-    //import { userNameStore } from '$lib/localStore.js';
-	let name =""
+	//import { userNameStore } from '$lib/localStore.js';
+	let name = '';
 	let eckey = null;
 	async function writeKey() {
-		if (!browser || name==="") return;
+		if (!browser || name === '') return;
 		try {
 			eckey = await generateAndWriteKeys(name);
 			let enc = new TextEncoder();
@@ -61,17 +61,21 @@
 				<span class="text-lime-400">restore</span> verification
 			</h1>
 			<div class="flex flex-col space-y-2 mt-4">
-				<label for="username" class="text-sm text-zinc-200">Your name/Nickname</label>
+				<label for="username" class="text-zinc-200">Your name/Nickname</label>
 
 				<div>
 					<input
 						type="text"
 						name="username"
 						bind:value={name}
-						class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl text-zinc-900"
+						class="w-full border-zinc-200 p-4 pr-12  shadow-sm rounded-2xl text-zinc-900 mb-1"
 						placeholder="that'd be stored and used further on"
 						required
 					/>
+					
+					<span class="text-sm text-zinc-500 mt-2"
+						>We recommend using more distinctive name - instead of 'Adam' use Adam S. 'Johny' would be easier to recognize as 'JohnyBoy74'</span
+					>
 				</div>
 			</div>
 			<p class="mt-6 mb-8 text-lg sm:mb-12">
