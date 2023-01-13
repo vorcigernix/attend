@@ -4,7 +4,10 @@
 	//import { userNameStore } from '$lib/localStore.js';
 	let name = '';
 	let eckey = null;
+	$: existingUser = false;
+	$: submitting = false;
 	async function writeKey() {
+		submitting = true;
 		if (!browser || name === '') return;
 		try {
 			eckey = await generateAndWriteKeys(name);
@@ -13,8 +16,10 @@
 			//let dec = new TextDecoder();
 			//console.log(dec.decode(eckey));
 		} catch (e) {
-			console.error(e);
+			console.info('Issue in generating or storing keys:', e);
+			existingUser = true;
 		}
+		submitting = false;
 		return;
 	}
 </script>
@@ -54,12 +59,20 @@
 			{/if}
 		</div>
 		<div
-			class="flex flex-col justify-center p-6 text-center lg:max-w-md xl:max-w-lg lg:text-left backdrop-blur bg-black/20 rounded-3xl"
+			class="flex flex-col justify-center p-6 text-center lg:max-w-md xl:max-w-lg lg:text-left backdrop-blur bg-black/40 rounded-3xl {submitting &&
+				`opacity-10`}"
 		>
-			<h1 class="text-5xl font-bold leading-none sm:text-6xl typogra">
-				Create or
-				<span class="text-lime-400">restore</span> verification
-			</h1>
+			{#if existingUser}
+				<h1 class="text-5xl font-bold leading-none sm:text-6xl typogra">
+					Have we
+					<span class="text-lime-400">met</span> ?
+				</h1>
+			{:else}
+				<h1 class="text-5xl font-bold leading-none sm:text-6xl typogra">
+					Create or
+					<span class="text-lime-400">restore</span> verification
+				</h1>
+			{/if}
 			<div class="flex flex-col space-y-2 mt-4">
 				<label for="username" class="text-zinc-200">Your name/Nickname</label>
 
@@ -72,18 +85,27 @@
 						placeholder="that'd be stored and used further on"
 						required
 					/>
-					
+
 					<span class="text-sm text-zinc-500 mt-2"
-						>We recommend using more distinctive name - instead of 'Adam' use Adam S. 'Johny' would be easier to recognize as 'JohnyBoy74'</span
+						>We recommend using distinctive, unique name - instead of 'Adam' use Adam S. 'Johny'
+						would be easier to recognize as 'JohnyBoy74'</span
 					>
 				</div>
 			</div>
-			<p class="mt-6 mb-8 text-lg sm:mb-12">
-				Verification is super easy. You just click on the green button
-				<br class="hidden md:inline lg:hidden" />and you are done. When the verification key is
-				generated, you can download a recovery file that later serve to restore your account on any
-				device.
-			</p>
+			{#if existingUser}
+				<p class="mt-6 mb-8 text-lg sm:mb-12">
+					We already know a user with this nickname.
+					<br class="hidden md:inline lg:hidden" />If this is yours, please use restore button. If
+					not, consider adding your favorite number at the end.
+				</p>
+			{:else}
+				<p class="mt-6 mb-8 text-lg sm:mb-12">
+					Verification is super easy. You just click on the green button
+					<br class="hidden md:inline lg:hidden" />and you are done. When the verification key is
+					generated, you can download a recovery file that later serve to restore your account on
+					any device.
+				</p>
+			{/if}
 			<div
 				class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start"
 			>

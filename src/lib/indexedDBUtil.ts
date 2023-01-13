@@ -9,7 +9,8 @@ type IDBKeyPairObject = {
 };
 
 export async function generateAndWriteKeys(name: string) {
-  //console.log(name);
+  const uid = crypto.randomUUID();
+  const userdetails = { nickname: name, uid: uid };
   let keyPair = await window.crypto.subtle.generateKey(
     {
       name: "ECDSA",
@@ -36,12 +37,23 @@ export async function generateAndWriteKeys(name: string) {
       hash: "SHA-384",
     },
     keyPair.privateKey,
-    new TextEncoder().encode(name),
+    new TextEncoder().encode(JSON.stringify(userdetails)),
   );
   try {
-    writeKeyPair(await nonExportableKeyPairs, name, signature);
+    const neKP = await nonExportableKeyPairs;
+
+    const regresult: boolean = await registerKeyPair(publicKey, userdetails);
+    if (regresult) {
+      await writeKeyPair(
+        neKP,
+        JSON.stringify(userdetails),
+        signature,
+      );
+    } else {
+      throw new Error("Account exists");
+    }
   } catch (e) {
-    console.log(e);
+    //console.log(e);
     throw new Error(e);
   }
 
@@ -77,42 +89,58 @@ async function writeKeyPair(
   name: String,
   signature: ArrayBuffer,
 ) {
-  const db = await getKeyPairDatabase();
-  const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
-  const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
-  const getRequest = objectStore.get(KEYPAIR_IDENT);
-  getRequest.onerror = (ev) => {
-    console.error("Error getting key object", ev);
-    throw (getRequest.error);
-  };
+  return new Promise<boolean>(async (resolve, reject) => {
+    const db = await getKeyPairDatabase();
+    const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
+    const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
+    const getRequest = objectStore.get(KEYPAIR_IDENT);
+    getRequest.onerror = (ev) => {
+      console.error("Error getting key object", ev);
+      reject(getRequest.error);
+    };
 
-  getRequest.onsuccess = async (ev) => {
-    let obj: IDBKeyPairObject = getRequest.result;
-    if (obj) {
-      console.log("Found existing device key pair in IDB");
-      return [obj.keyPair, true];
-    } else {
-      obj = {
-        id: KEYPAIR_IDENT,
-        keyPair,
-        name,
-        signature,
-      };
-      const putTransaction = db.transaction(DEVICE_IDB_IDENT, "readwrite");
-      const objectStore = putTransaction.objectStore(DEVICE_IDB_IDENT);
-      const putRequest = objectStore.put(obj);
-      putRequest.onerror = (ev) => {
-        // ToDo: is indexeddb available e.g. in Firefox Private Windows?
-        // CLient would just fail connecting then.
-        console.error("Error putting key object", ev);
-        throw (putRequest.error);
-      };
-      putRequest.onsuccess = (ev) => {
-        console.log("New device key pair saved to IDB");
-        return [keyPair, false];
-      };
-    }
-  };
+    getRequest.onsuccess = async (ev) => {
+      let obj: IDBKeyPairObject = getRequest.result;
+      if (obj) {
+        console.log("Found existing device key pair in IDB");
+        resolve(false);
+      } else {
+        obj = {
+          id: KEYPAIR_IDENT,
+          keyPair,
+          name,
+          signature,
+        };
+        const putTransaction = db.transaction(DEVICE_IDB_IDENT, "readwrite");
+        const objectStore = putTransaction.objectStore(DEVICE_IDB_IDENT);
+        const putRequest = objectStore.put(obj);
+        putRequest.onerror = (ev) => {
+          // ToDo: is indexeddb available e.g. in Firefox Private Windows?
+          // CLient would just fail connecting then.
+          console.error("Error putting key object", ev);
+          reject(putRequest.error);
+        };
+        putRequest.onsuccess = (ev) => {
+          console.log("New device key pair saved to IDB");
+          resolve(true);
+        };
+      }
+    };
+  });
+}
+
+async function registerKeyPair(
+  key: JsonWebKey,
+  userdetails: Object,
+): Promise<boolean> {
+  const response = await fetch("/createSignature", {
+    method: "POST",
+    body: JSON.stringify({ key, userdetails }),
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+  return response.status === 409 ? false : true;
 }
 
 async function getKeyPairDatabase(): Promise<IDBDatabase> {
@@ -134,8 +162,8 @@ async function getKeyPairDatabase(): Promise<IDBDatabase> {
 
 async function getDbKeyAndSignature(
   db: IDBDatabase,
-): Promise<[CryptoKey, ArrayBuffer, String]> {
-  return new Promise<[CryptoKey, ArrayBuffer, String]>((resolve, reject) => {
+): Promise<[CryptoKey, ArrayBuffer, string]> {
+  return new Promise<[CryptoKey, ArrayBuffer, string]>((resolve, reject) => {
     const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
     const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
     const getRequest = objectStore.get(KEYPAIR_IDENT);
@@ -147,7 +175,7 @@ async function getDbKeyAndSignature(
       //console.log(getRequest.result);
       let obj: IDBKeyPairObject = getRequest.result;
       if (obj) {
-        resolve([obj.keyPair.publicKey, obj.signature, obj.name]);
+        resolve([obj.keyPair.publicKey, obj.signature, `${obj.name}`]);
       } else {
         console.error("Object misformatted", getRequest.error);
         reject(getRequest.error);
@@ -156,17 +184,19 @@ async function getDbKeyAndSignature(
   });
 }
 
-export async function getKeyAndSignature(): Promise<
-  [CryptoKey, ArrayBuffer, String]
-> {
-  return new Promise<[CryptoKey, ArrayBuffer, String]>(
-    async (resolve, reject) => {
-      try {
-        const db = await getKeyPairDatabase();
-        resolve(await getDbKeyAndSignature(db));
-      } catch (e) {
-        reject(console.info("validation not set"));
-      }
+export async function validateSignature() {
+  const db = await getKeyPairDatabase();
+  const ixDbData = await getDbKeyAndSignature(db);
+  //console.log(ixDbData);
+  const encoded = new TextEncoder().encode(ixDbData[2]);
+  console.log(encoded);
+  return await crypto.subtle.verify(
+    {
+      name: "ECDSA",
+      hash: { name: "SHA-384" },
     },
+    ixDbData[0],
+    ixDbData[1],
+    encoded,
   );
 }

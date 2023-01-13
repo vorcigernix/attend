@@ -2,6 +2,7 @@
 	export const prerender = true;
 	export const csr = false;
 </script>
+
 <section class=" text-zinc-50">
 	<div class="container flex flex-col justify-center p-3 mx-auto md:p-8 pt-24">
 		<p class="p-2 text-sm font-medium tracking-wider text-center uppercase">
@@ -16,28 +17,29 @@
 			<div>
 				<h3 class="font-semibold">So what is this about?</h3>
 				<p class="mt-1 text-zinc-200">
-					I have a regular floorbal (I hear you, shame on you, it is a best game on the planet)
-					training with like 12 frens. We need to know if there is at least six of us coming, can't
-					play in less. So the information about attendance is kinda important to us. There are more
-					use cases - regular pub with frens, Sunday sermons, game parties. Basically everything
-					where you need to know if your frens are joining you on the event.
+					I have a regular floorball (I hear you, shame on you, it is the best game on the planet)
+					training with like 12 friends. We need to know if there are at least six of us going
+					because we can't play with fewer. Therefore, attendance information is kinda important to
+					us. There are more use cases - going to the pub with friends, Sunday sermons, and game
+					parties. Basically, everything where you need to know if your friends are joining you at
+					an event.
 				</p>
 			</div>
 			<div>
 				<h3 class="font-semibold">Why have you created this app?</h3>
 				<p class="mt-1 text-zinc-200">
-					All the apps we tried are either paid, overcomplicated or completely unreliable. So I
-					decided to invest a little of my time to build something more simple. I kinda
-					underestimated the effort to be honest, but I like what I built and I hope this would be
-					useful to the people with the same need.
+					All the apps we tried either cost money, were overcomplicated, or completely unreliable. I
+					decided to invest a little of my time building something simpler. I kinda underestimated
+					the effort to be honest, but I like what I have created. My hope is this will be useful to
+					people with the same need.
 				</p>
 				<p />
 			</div>
 			<div>
 				<h3 class="font-semibold">I can't insert animated gifs...</h3>
 				<p class="mt-1 text-zinc-200">
-					Yes. This is built as a minimal product for the reason. If you really miss something
-					crucial for your gang,don't hesistate <a
+					Yes. I have designed this app to be simple for a reason. If you find something is missing
+					that is crucial for your gang, don't hesitate to drop me a line. <a
 						class="typogra underline"
 						href="mailto:vorcigernix+feedback@gmail.com"
 					>
@@ -48,7 +50,7 @@
 			<div>
 				<h3 class="font-semibold">What is your business model?</h3>
 				<p class="mt-1 text-zinc-200">
-					I don't have any. Honestly, I am super lame wen it comes to money. You can support me at
+					I don't have any. Honestly, I am super lame when it comes to money. You can support me at
 					adamsobotka.eth.
 				</p>
 			</div>
@@ -61,9 +63,9 @@
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">Is it only for man, dude?</h3>
+				<h3 class="font-semibold">Is this only for men, dude?</h3>
 				<p class="mt-1 text-zinc-200">
-					Nah. Sorry about that, no offense meant. Dude RSVP was like the first idea for name that
+					Nah. Sorry about that, no offense meant. Dude RSVP was like the first idea for a name that
 					kinda survived. It definitely does not mean that I don't want people who identify
 					themselves differently here. Your gender/orientation/nationality/skin color is completely
 					your business unless you support Putin's bloody war on Ukraine.
@@ -88,8 +90,7 @@
 		<div class="flex flex-row pr-3 space-x-4 sm:space-x-8">
 			<div
 				class="flex items-center justify-center flex-shrink-0 w-6 h-6 rounded-full bg-lime-400"
-			>
-			</div>
+			/>
 			<ul class="flex flex-wrap items-center space-x-4 sm:space-x-8">
 				<li>
 					<a rel="noopener noreferrer" href="policy.pdf">Privacy Policy</a>

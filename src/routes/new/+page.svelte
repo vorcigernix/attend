@@ -118,7 +118,7 @@
 					fill="currentColor"
 				/>
 			</svg>{/if}
-		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8">
+		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 md:mx-8 lg:w-1/2 lg:px-8 backdrop-blur bg-black/20 rounded-3xl">
 			<div class="mx-auto max-w-lg text-center md:text-left">
 				<h1 class="text-2xl sm:text-5xl typogra">New event</h1>
 

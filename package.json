@@ -10,6 +10,8 @@
     "format": "prettier --plugin-search-dir . --write ."
   },
   "devDependencies": {
+    "@dicebear/collection": "^5.0.2",
+    "@dicebear/core": "^5.0.2",
     "@sveltejs/adapter-auto": "1.0.0",
     "@sveltejs/adapter-cloudflare": "^1.0.0",
     "@sveltejs/kit": "1.0.1",

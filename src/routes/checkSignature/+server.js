@@ -2,15 +2,16 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
-    const { publicKey, data, signature } = await request.json();
+    const keyandsignature = await request.json();
+    console.log(keyandsignature);
     let result = await crypto.subtle.verify(
         {
             name: "ECDSA",
             hash: { name: "SHA-384" },
         },
-        publicKey,
+        key,
         signature,
-        new TextEncoder().encode(data)
+        new TextEncoder().encode(userdetails.nickname)
     );
     return result;
 }
