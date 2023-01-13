@@ -55,20 +55,26 @@
 				</p>
 			</div>
 			<div>
-				<h3 class="font-semibold">How do I log in?</h3>
-				<p class="mt-1 text-zinc-200">
-					There is no authentication yet. I don't want to handle any personal information or
-					anything like that. I do have an idea based cryptography, but that will take some time to
-					implement.
-				</p>
-			</div>
-			<div>
 				<h3 class="font-semibold">Is this only for men, dude?</h3>
 				<p class="mt-1 text-zinc-200">
 					Nah. Sorry about that, no offense meant. Dude RSVP was like the first idea for a name that
 					kinda survived. It definitely does not mean that I don't want people who identify
 					themselves differently here. Your gender/orientation/nationality/skin color is completely
 					your business unless you support Putin's bloody war on Ukraine.
+				</p>
+			</div>
+			<div>
+				<h3 class="font-semibold">How do I log in?</h3>
+				<p class="mt-1 text-zinc-200">
+					You don't. You can <a href="/validate" class="font-bold text-lime-500 typogra"
+						>claim your nickname</a
+					> though and we will disallow anyone else to use your nickname. This process rely on blockchain
+					technology and cryptography.
+				</p>
+				<p class="mt-1 text-zinc-200">
+					On the blockchain we save your nickname, public key and unique ID (both generated on your
+					computer). The whole system is completely safe as long as your computer is safe - most
+					dangerous to your internet security are generally browser plugins. 
 				</p>
 			</div>
 			<div>
