@@ -9,5 +9,8 @@ export async function handle(state, action) {
   if (input.type === 'fetchAccount') {
     return { result: Object.values(state.accounts).find((a) => a.nickname === input.accountName) };
   }
+  if (input.type === 'fetchPubKey') {
+    return { result: state.accounts[input.accountId] };
+  }
   return { state };
 }

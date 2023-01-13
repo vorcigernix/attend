@@ -9,11 +9,8 @@
 	const customProperties = new WeakMap();
 	/** @type {import('./$types').ActionData} */
 	export let form;
-	async function logKeystore() {
-		const _keystore = await $userInfo;
-		if (_keystore) console.log(_keystore);
-	}
-	logKeystore();
+	//console.log($userInfo.userdetails);
+	const userName = $userInfo ? JSON.parse($userInfo.userdetails).nickname : '';
 	let submitting = false;
 	let freqradio = 1;
 	let recurradio = 0;
@@ -118,7 +115,9 @@
 					fill="currentColor"
 				/>
 			</svg>{/if}
-		<div class="w-full px-4 py-12 sm:px-6 sm:py-16 md:mx-8 lg:w-1/2 lg:px-8 backdrop-blur bg-black/20 rounded-3xl">
+		<div
+			class="w-full px-4 py-12 sm:px-6 sm:py-16 md:mx-8 lg:w-1/2 lg:px-8 backdrop-blur bg-black/20 rounded-3xl"
+		>
 			<div class="mx-auto max-w-lg text-center md:text-left">
 				<h1 class="text-2xl sm:text-5xl typogra">New event</h1>
 
@@ -151,7 +150,7 @@
 						<input
 							type="text"
 							name="username"
-							value='userName'
+							value={userName}
 							class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm rounded-2xl"
 							placeholder="that's how your frens see you"
 							required

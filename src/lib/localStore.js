@@ -4,9 +4,10 @@ import { validateSignature } from "$lib/indexedDBUtil";
 
 export const newEventStore = writable();
 export const userInfo = writable();
-let userkeystore;
+let userInfoDetails;
 
 if (browser) {
-    userkeystore = await validateSignature() //|| null;
-    console.log(userkeystore);
+    userInfoDetails = await validateSignature(); //|| null;
+    if (userInfoDetails.valid)
+        userInfo.set(userInfoDetails);
 }

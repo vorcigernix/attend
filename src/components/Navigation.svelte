@@ -3,13 +3,34 @@
 	import { draw } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import Search from './Search.svelte';
+	import { userInfo } from '$lib/localStore.js';
 	export let data;
 	export let pathname = '';
+	const userDetails = $userInfo ? JSON.parse($userInfo.userdetails) : {};
+	console.log(userDetails);
 </script>
 
 <header class="p-4 text-zinc-50">
 	<div class="container flex justify-between h-16 mx-auto">
 		<ul class="items-center justify-start hidden space-x-3 lg:flex ">
+			{#if userDetails}
+				<span>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						class="w-6 h-6"
+						alt={userDetails.uid}
+					>
+						<title>{userDetails.nickname}</title>
+						<path
+							fill-rule="evenodd"
+							d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 00-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08zm3.094 8.016a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+				</span>
+			{/if}
 			<li class="flex">
 				<a
 					href="/"
@@ -21,12 +42,17 @@
 				<a
 					class:active={$page.url.pathname === '/about'}
 					href="/about"
-					class="text-lg flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold">About</a
+					class="text-lg flex items-center px-4 -mb-1 border-b-2 border-transparent font-bold"
+					>About</a
 				>
 			</li>
 		</ul>
 		<a href="/" aria-label="Domu" class="flex items-center p-2">
-			<svg viewBox="0 0 200 200" class=" w-10 md:w-16 text-zinc-900" xmlns="http://www.w3.org/2000/svg">
+			<svg
+				viewBox="0 0 200 200"
+				class=" w-10 md:w-16 text-zinc-900"
+				xmlns="http://www.w3.org/2000/svg"
+			>
 				{#key pathname}
 					<path
 						in:draw={{ duration: 5000, delay: 500, easing: quintOut }}

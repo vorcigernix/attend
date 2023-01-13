@@ -143,6 +143,20 @@ async function registerKeyPair(
   return response.status === 409 ? false : true;
 }
 
+async function fetchPublicKey(
+  userdetails: Object,
+): Promise<Object> {
+  const response = await fetch("/fetchPubKey", {
+    method: "POST",
+    body: JSON.stringify({ userdetails }),
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+  const respObj: any = await response.json();
+  return respObj["key"] as CryptoKey;
+}
+
 async function getKeyPairDatabase(): Promise<IDBDatabase> {
   return new Promise<IDBDatabase>((resolve, reject) => {
     const openRequest = indexedDB.open(DEVICE_IDB_IDENT, 1);
@@ -160,7 +174,7 @@ async function getKeyPairDatabase(): Promise<IDBDatabase> {
   });
 }
 
-async function getDbKeyAndSignature(
+async function getIxDbNameAndSignature(
   db: IDBDatabase,
 ): Promise<[CryptoKey, ArrayBuffer, string]> {
   return new Promise<[CryptoKey, ArrayBuffer, string]>((resolve, reject) => {
@@ -186,17 +200,28 @@ async function getDbKeyAndSignature(
 
 export async function validateSignature() {
   const db = await getKeyPairDatabase();
-  const ixDbData = await getDbKeyAndSignature(db);
-  //console.log(ixDbData);
+  const ixDbData = await getIxDbNameAndSignature(db);
+  const exmDbPbKey = await fetchPublicKey(ixDbData[2]);
+  let pub: CryptoKey = await window.crypto.subtle.importKey(
+    "jwk",
+    exmDbPbKey,
+    {
+      name: "ECDSA",
+      namedCurve: "P-384",
+    },
+    false,
+    ["verify"],
+  );
   const encoded = new TextEncoder().encode(ixDbData[2]);
-  console.log(encoded);
-  return await crypto.subtle.verify(
+  const valid = await crypto.subtle.verify(
     {
       name: "ECDSA",
       hash: { name: "SHA-384" },
     },
-    ixDbData[0],
+    //ixDbData[0],
+    pub,
     ixDbData[1],
     encoded,
   );
+  return { valid: valid, userdetails: ixDbData[2] };
 }
