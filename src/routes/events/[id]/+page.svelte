@@ -1,13 +1,15 @@
 <script>
 	/** @type {import('./$types').PageData} */
 	/** @type {import('./$types').ActionData} */
-	import { userNameStore } from '$lib/localStore.js';
+	import { userInfo } from '$lib/localStore.js';
 	import { format, getDay } from 'date-fns';
 	import { enhance } from '$app/forms';
 	import { fade } from 'svelte/transition';
 
 	export let form;
 	export let data;
+
+	const userName = $userInfo ? JSON.parse($userInfo.userdetails).nickname : '';
 
 	let submitting = false;
 
@@ -27,7 +29,7 @@
 	console.log('attend', currentAttendance);
 
 	const myAttendance = data.attendance.filter((att) => {
-		return att.username === form?.username || att.username === $userNameStore;
+		return att.username === form?.username || att.username === userName;
 	});
 
 	//console.log('myatt', myAttendance);
@@ -129,11 +131,6 @@
 						});
 						pendingAttendance = data.getAll('nextEventsChoice');
 						return async ({ result, update }) => {
-							if (result.type === 'success') {
-								$userNameStore = data.get('username');
-								//form.reset();
-							}
-
 							submitting = false;
 							//console.log('newAtt', currentAttendance);
 							//update();
@@ -146,7 +143,7 @@
 						<input
 							type="text"
 							name="username"
-							value={form?.username ?? $userNameStore}
+							value={form?.username ?? userName}
 							class="w-full border-zinc-200 p-4 pr-12 text-sm shadow-sm text-zinc-900 rounded-full"
 							placeholder="takhle tě uvidí ostatní"
 							required
