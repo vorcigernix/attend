@@ -30,10 +30,10 @@ export const actions = {
         attendance: [{ username: data.get('username'), dates: [new Date().toUTCString()] }]
       }
     }];
-    console.log(inputs);
+    //console.log(inputs);
     try {
       const res = await exmInstance.functions.write(functionId, inputs);
-      console.log(res.status);
+      //console.log(res.status);
       newEventStore.set(inputs);
       return { success: true, url: uuid };
     }

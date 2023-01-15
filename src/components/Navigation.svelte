@@ -7,7 +7,7 @@
 	export let data;
 	export let pathname = '';
 	const userDetails = $userInfo ? JSON.parse($userInfo.userdetails) : {};
-	console.log(userDetails);
+	//console.log(userDetails);
 </script>
 
 <header class="p-4 text-zinc-50">
