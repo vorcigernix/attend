@@ -6,16 +6,25 @@
 	let eckey = null;
 	$: existingUser = false;
 	$: submitting = false;
+	let template = null;
+	let files = null;
+
+	$: if (files) {
+		const fileText = files[0].text();
+		fileText.then((text) => {
+			console.log(text);
+			template = JSON.parse(text);
+			console.log(template);
+		});
+		files = null;
+	}
+
 	const userName = $userInfo ? JSON.parse($userInfo.userdetails).nickname : null;
 	async function writeKey() {
 		submitting = true;
 		if (!browser || name === '') return;
 		try {
 			eckey = await generateAndWriteKeys(name);
-			let enc = new TextEncoder();
-			eckey = enc.encode(JSON.stringify(eckey));
-			//let dec = new TextDecoder();
-			//console.log(dec.decode(eckey));
 		} catch (e) {
 			console.info('Issue in generating or storing keys:', e);
 			existingUser = true;
@@ -123,10 +132,12 @@
 						on:click|preventDefault={() => writeKey()}
 						class=" font-bold inline-flex items-center text-zinc-900 bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded-full text-sm md:text-base"
 						>Create verification</button
-					><button
-						class=" font-bold ml-4 rounded-full inline-flex items-center text-zinc-200 bg-zinc-800 border-0 py-2 px-6 focus:outline-none hover:bg-zinc-700 hover:text-zinc-50 text-sm md:text-base"
-						>Restore</button
 					>
+					<label
+						class=" font-bold ml-4 rounded-full inline-flex items-center text-zinc-200 bg-zinc-800 border-0 py-2 px-6 focus:outline-none hover:bg-zinc-700 hover:text-zinc-50 text-sm md:text-base"
+						for="restore">Restore</label
+					>
+					<input class="hidden" accept=".key" bind:files id="restore" name="restore" type="file" />
 					<a href="/about#auth" class="ml-4 rounded-full inline-flex items-center py-2 px-2">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

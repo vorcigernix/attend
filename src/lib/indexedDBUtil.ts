@@ -10,7 +10,8 @@ type IDBKeyPairObject = {
 
 export async function generateAndWriteKeys(name: string) {
   const uid = crypto.randomUUID();
-  const userdetails = { nickname: name, uid: uid };
+  const userdetails = { nickname: encodeURI(name), uid: uid };
+  let userSignature: ArrayBuffer;
   let keyPair = await window.crypto.subtle.generateKey(
     {
       name: "ECDSA",
@@ -31,7 +32,7 @@ export async function generateAndWriteKeys(name: string) {
     privateKey,
     publicKey,
   );
-  const signature = await window.crypto.subtle.sign(
+  userSignature = await window.crypto.subtle.sign(
     {
       name: "ECDSA",
       hash: "SHA-384",
@@ -41,13 +42,12 @@ export async function generateAndWriteKeys(name: string) {
   );
   try {
     const neKP = await nonExportableKeyPairs;
-
     const regresult: boolean = await registerKeyPair(publicKey, userdetails);
     if (regresult) {
       await writeKeyPair(
         neKP,
         JSON.stringify(userdetails),
-        signature,
+        userSignature,
       );
     } else {
       throw new Error("Account exists");
@@ -56,8 +56,12 @@ export async function generateAndWriteKeys(name: string) {
     //console.log(e);
     throw new Error(e);
   }
-
-  return { priv: privateKey, pub: publicKey, nickname: name };
+  const signArray = Array.from(new Uint8Array(userSignature));
+  return {
+    pvk: JSON.stringify(privateKey),
+    userdetails: JSON.stringify(userdetails),
+    sig: JSON.stringify(signArray),
+  };
 }
 
 async function makeKeysNonExportable(jwkpriv, jwkpub) {
@@ -191,37 +195,41 @@ async function getIxDbNameAndSignature(
       if (obj) {
         resolve([obj.keyPair.publicKey, obj.signature, `${obj.name}`]);
       } else {
-        console.error("Object misformatted", getRequest.error);
-        reject(getRequest.error);
+        console.info("No ID found ", getRequest.error);
+        reject();
       }
     };
   });
 }
 
 export async function validateSignature() {
-  const db = await getKeyPairDatabase();
-  const ixDbData = await getIxDbNameAndSignature(db);
-  const exmDbPbKey = await fetchPublicKey(ixDbData[2]);
-  let pub: CryptoKey = await window.crypto.subtle.importKey(
-    "jwk",
-    exmDbPbKey,
-    {
-      name: "ECDSA",
-      namedCurve: "P-384",
-    },
-    false,
-    ["verify"],
-  );
-  const encoded = new TextEncoder().encode(ixDbData[2]);
-  const valid = await crypto.subtle.verify(
-    {
-      name: "ECDSA",
-      hash: { name: "SHA-384" },
-    },
-    //ixDbData[0],
-    pub,
-    ixDbData[1],
-    encoded,
-  );
-  return { valid: valid, userdetails: ixDbData[2] };
+  try {
+    const db = await getKeyPairDatabase();
+    const ixDbData = await getIxDbNameAndSignature(db);
+    const exmDbPbKey = await fetchPublicKey(ixDbData[2]);
+    let pub: CryptoKey = await window.crypto.subtle.importKey(
+      "jwk",
+      exmDbPbKey,
+      {
+        name: "ECDSA",
+        namedCurve: "P-384",
+      },
+      false,
+      ["verify"],
+    );
+    const encoded = new TextEncoder().encode(ixDbData[2]);
+    const valid = await crypto.subtle.verify(
+      {
+        name: "ECDSA",
+        hash: { name: "SHA-384" },
+      },
+      //ixDbData[0],
+      pub,
+      ixDbData[1],
+      encoded,
+    );
+    return { valid: valid, userdetails: ixDbData[2] };
+  } catch {
+    return { valid: false, userdetails: null };
+  }
 }
