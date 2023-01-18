@@ -1,25 +1,25 @@
 <script>
-	import { generateAndWriteKeys } from '$lib/indexedDBUtil';
+	import { generateAndWriteKeys } from '$lib/utils/indexedDBUtil';
 	import { browser } from '$app/environment';
 	import { userInfo } from '$lib/localStore.js';
 	let name = '';
 	let eckey = null;
 	$: existingUser = false;
 	$: submitting = false;
-	let template = null;
+	let restoreObj = null;
 	let files = null;
 
 	$: if (files) {
 		const fileText = files[0].text();
 		fileText.then((text) => {
-			console.log(text);
-			template = JSON.parse(text);
-			console.log(template);
+			//console.log(text);
+			restoreObj = JSON.parse(text);
+			console.log(restoreObj);
 		});
 		files = null;
 	}
 
-	const userName = $userInfo ? JSON.parse($userInfo.userdetails).nickname : null;
+	const userName = $userInfo ? $userInfo.userdetails.nickname : null;
 	async function writeKey() {
 		submitting = true;
 		if (!browser || name === '') return;

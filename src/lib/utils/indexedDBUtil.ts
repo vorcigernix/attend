@@ -1,12 +1,51 @@
-const DEVICE_IDB_IDENT = "ATTND_DEVICE_KEY_IDENT";
-const KEYPAIR_IDENT = "ATTND_DEVICE_KEY_PAIR" as "ATTND_DEVICE_KEY_PAIR";
+import {
+  DEVICE_IDB_IDENT,
+  IDBKeyPairObject,
+  KEYPAIR_IDENT,
+  userdetails,
+} from "./types";
 
-type IDBKeyPairObject = {
-  id: typeof KEYPAIR_IDENT;
-  keyPair: CryptoKeyPair;
-  name: String;
-  signature: ArrayBuffer;
-};
+export async function restoreKeys(
+  pvk: string,
+  userdetails: userdetails,
+  sig: Uint8Array,
+) {
+  // let sigobj = (JSON.parse(sig));
+  // sigobj = Object.values(sigobj);
+  //console.log(sigobj);
+  const encuserobj: userdetails = {
+    ...userdetails,
+    ...{ nickname: encodeURI(userdetails.nickname) },
+  };
+  let priv: CryptoKey = await window.crypto.subtle.importKey(
+    "jwk",
+    JSON.parse(pvk) as JsonWebKey,
+    {
+      name: "ECDSA",
+      namedCurve: "P-384",
+    },
+    false,
+    ["sign"],
+  );
+  // userSignature = await window.crypto.subtle.sign(
+  //   {
+  //     name: "ECDSA",
+  //     hash: "SHA-384",
+  //   },
+  //   keyPair.privateKey,
+  //   new TextEncoder().encode(JSON.stringify(userdetails)),
+  // );
+  // const signArray = new Uint8Array(userSignature);
+  try {
+    await writeKey(
+      priv,
+      encuserobj,
+      sig,
+    );
+  } catch {
+    throw new Error("Failed to recover account");
+  }
+}
 
 export async function generateAndWriteKeys(name: string) {
   const uid = crypto.randomUUID();
@@ -44,9 +83,9 @@ export async function generateAndWriteKeys(name: string) {
     const neKP = await nonExportableKeyPairs;
     const regresult: boolean = await registerKeyPair(publicKey, userdetails);
     if (regresult) {
-      await writeKeyPair(
-        neKP,
-        JSON.stringify(userdetails),
+      await writeKey(
+        neKP.privateKey,
+        userdetails,
         userSignature,
       );
     } else {
@@ -88,9 +127,9 @@ async function makeKeysNonExportable(jwkpriv, jwkpub) {
   return { privateKey: priv, publicKey: pub };
 }
 
-async function writeKeyPair(
-  keyPair: CryptoKeyPair,
-  name: String,
+async function writeKey(
+  key: CryptoKey,
+  name: userdetails,
   signature: ArrayBuffer,
 ) {
   return new Promise<boolean>(async (resolve, reject) => {
@@ -111,7 +150,7 @@ async function writeKeyPair(
       } else {
         obj = {
           id: KEYPAIR_IDENT,
-          keyPair,
+          key,
           name,
           signature,
         };
@@ -180,8 +219,8 @@ async function getKeyPairDatabase(): Promise<IDBDatabase> {
 
 async function getIxDbNameAndSignature(
   db: IDBDatabase,
-): Promise<[CryptoKey, ArrayBuffer, string]> {
-  return new Promise<[CryptoKey, ArrayBuffer, string]>((resolve, reject) => {
+): Promise<IDBKeyPairObject> {
+  return new Promise<IDBKeyPairObject>((resolve, reject) => {
     const getTransaction = db.transaction(DEVICE_IDB_IDENT, "readonly");
     const objectStore = getTransaction.objectStore(DEVICE_IDB_IDENT);
     const getRequest = objectStore.get(KEYPAIR_IDENT);
@@ -193,7 +232,7 @@ async function getIxDbNameAndSignature(
       //console.log(getRequest.result);
       let obj: IDBKeyPairObject = getRequest.result;
       if (obj) {
-        resolve([obj.keyPair.publicKey, obj.signature, `${obj.name}`]);
+        resolve(obj);
       } else {
         console.info("No ID found ", getRequest.error);
         reject();
@@ -206,7 +245,9 @@ export async function validateSignature() {
   try {
     const db = await getKeyPairDatabase();
     const ixDbData = await getIxDbNameAndSignature(db);
-    const exmDbPbKey = await fetchPublicKey(ixDbData[2]);
+    //console.log(ixDbData.name.uid);
+    //return { valid: false, userdetails: null };
+    const exmDbPbKey = await fetchPublicKey(ixDbData.name);
     let pub: CryptoKey = await window.crypto.subtle.importKey(
       "jwk",
       exmDbPbKey,
@@ -217,18 +258,18 @@ export async function validateSignature() {
       false,
       ["verify"],
     );
-    const encoded = new TextEncoder().encode(ixDbData[2]);
+    const encoded = new TextEncoder().encode(JSON.stringify(ixDbData.name));
     const valid = await crypto.subtle.verify(
       {
         name: "ECDSA",
         hash: { name: "SHA-384" },
       },
-      //ixDbData[0],
       pub,
-      ixDbData[1],
+      ixDbData.signature,
       encoded,
     );
-    return { valid: valid, userdetails: ixDbData[2] };
+    //console.log(valid);
+    return { valid: valid, userdetails: ixDbData.name };
   } catch {
     return { valid: false, userdetails: null };
   }
