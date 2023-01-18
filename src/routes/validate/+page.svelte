@@ -1,5 +1,6 @@
 <script>
-	import { generateAndWriteKeys, restoreKeys } from '$lib/indexedDBUtil';
+	//import { generateAndWriteKeys, restoreKeys } from '$lib/indexedDBUtil';
+	import { generateAndWriteKeys, restoreKeys } from '$lib/utils/cryptoDBfunctions';
 	import { browser } from '$app/environment';
 	import { userInfo } from '$lib/localStore.js';
 	let name = '';

@@ -1,4 +1,4 @@
-import {User, IDBKeyObject} from "./interfaces"
+import { IDBKeyObject } from "./interfaces";
 
 export class IDBStore {
   private dbName: string;

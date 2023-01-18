@@ -1,3 +1,7 @@
+//Constants
+const DEVICE_IDB_IDENT = "ATTND_DEVICE_KEY_IDENT";
+const KEYPAIR_IDENT = "ATTND_DEVICE_KEY_PAIR" as "ATTND_DEVICE_KEY_PAIR";
+
 //Interfaces
 interface User {
   nickname: string;
@@ -5,10 +9,10 @@ interface User {
 }
 
 interface IDBKeyObject {
-  id: string;
+  id: typeof KEYPAIR_IDENT;
   key: CryptoKey;
   name: User;
   signature: Uint8Array;
 }
 
-export { IDBKeyObject, User };
+export { IDBKeyObject, User, KEYPAIR_IDENT};

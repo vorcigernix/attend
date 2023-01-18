@@ -1,12 +1,11 @@
 import { KeyManager } from "./KeyManager";
 import { UserDetails } from "./UserDetails";
 import { IDBStore } from "./IDBStore";
-import { IDBKeyObject, User } from "./interfaces";
+import { IDBKeyObject, KEYPAIR_IDENT, User } from "./interfaces";
 
 const keyManager = new KeyManager();
 const userDetails = new UserDetails();
 const store = new IDBStore("attnd_db", 1, "attnd_store");
-const KEYPAIR_IDENT = "ATTND_DEVICE_KEY_PAIR" as "ATTND_DEVICE_KEY_PAIR";
 
 export async function generateAndWriteKeys(name: string) {
   const { privateKey, publicKey } = await keyManager.generateKeyPair();
@@ -23,7 +22,7 @@ export async function generateAndWriteKeys(name: string) {
         name: encodedDetails,
         signature: signature,
       };
-      await store.set(keyObject);
+      await store.set(KEYPAIR_IDENT, keyObject);
     } else {
       throw new Error("Account already exists");
     }

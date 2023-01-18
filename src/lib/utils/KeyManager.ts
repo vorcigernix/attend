@@ -2,7 +2,7 @@ import { IDBKeyObject, User } from "./interfaces";
 
 export class KeyManager {
   storePublicKey(publicKey: CryptoKey, userDetails: User) {
-    throw new Error("Method not implemented.");
+    return true;
   }
   getPublicKeyByUser(userDetails: User) {
     return false;
