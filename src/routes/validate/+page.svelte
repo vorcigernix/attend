@@ -1,20 +1,22 @@
 <script>
-	import { generateAndWriteKeys } from '$lib/indexedDBUtil';
+	import { generateAndWriteKeys, restoreKeys } from '$lib/indexedDBUtil';
 	import { browser } from '$app/environment';
 	import { userInfo } from '$lib/localStore.js';
 	let name = '';
 	let eckey = null;
 	$: existingUser = false;
 	$: submitting = false;
-	let template = null;
+	let keytext = null;
 	let files = null;
 
 	$: if (files) {
 		const fileText = files[0].text();
 		fileText.then((text) => {
-			console.log(text);
-			template = JSON.parse(text);
-			console.log(template);
+			//console.log(text);
+			keytext = JSON.parse(text);
+			//console.log(keytext);
+			const { pubk, pvk, sig, userdetails } = keytext;
+			restoreKeys(pvk, pubk, userdetails, sig);
 		});
 		files = null;
 	}
@@ -112,7 +114,7 @@
 				</p>
 			{:else if userName}
 				<p class="mt-6 mb-8 text-lg sm:mb-12">
-					Hey {userName} nice to see you again.
+					Hey {decodeURI(userName)} nice to see you again.
 					<br class="hidden md:inline lg:hidden" />It is good to ve validated huh? How we can help?
 				</p>
 			{:else}
