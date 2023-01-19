@@ -1,5 +1,5 @@
 <script>
-	import { generateAndWriteKeys } from '$lib/utils/indexedDBUtil';
+	import { generateAndWriteKeys, restoreKeys } from '$lib/utils/indexedDBUtil';
 	import { browser } from '$app/environment';
 	import { userInfo } from '$lib/localStore.js';
 	let name = '';
@@ -12,9 +12,16 @@
 	$: if (files) {
 		const fileText = files[0].text();
 		fileText.then((text) => {
-			//console.log(text);
-			restoreObj = JSON.parse(text);
-			console.log(restoreObj);
+			//console.log(text.split(','));
+			const x = new Uint8Array(text.split(','));
+			//console.log(x);
+			const dec = new TextDecoder().decode(x);
+			//console.log(dec);
+			restoreObj = JSON.parse(dec);
+			//console.log(restoreObj);
+			const signature = Object.values(restoreObj.uint8Signature);
+			//console.log(new Uint8Array(signature));
+			restoreKeys(restoreObj.privateKey, restoreObj.userdetails, new Uint8Array(signature));
 		});
 		files = null;
 	}
@@ -24,12 +31,15 @@
 		submitting = true;
 		if (!browser || name === '') return;
 		try {
-			eckey = await generateAndWriteKeys(name);
+			const backup = await generateAndWriteKeys(name);
+			eckey = new TextEncoder().encode(JSON.stringify(backup));
 		} catch (e) {
 			console.info('Issue in generating or storing keys:', e);
 			existingUser = true;
 		}
 		submitting = false;
+		// const dec = new TextDecoder().decode(eckey);
+		// console.log(JSON.parse(dec));
 		return;
 	}
 </script>
@@ -59,7 +69,7 @@
 					>
 						<a
 							download="dude_rsvp.key"
-							href="data:application/json,{JSON.stringify(eckey)}"
+							href="data:application/octet-stream,{eckey}"
 							class="font-bold inline-flex items-center py-2 px-6 hover:bg-lime-600 text-sm md:text-base hover:rounded-full"
 						>
 							Download key backup
@@ -112,7 +122,7 @@
 				</p>
 			{:else if userName}
 				<p class="mt-6 mb-8 text-lg sm:mb-12">
-					Hey {userName} nice to see you again.
+					Hey {decodeURI(userName)} nice to see you again.
 					<br class="hidden md:inline lg:hidden" />It is good to ve validated huh? How we can help?
 				</p>
 			{:else}

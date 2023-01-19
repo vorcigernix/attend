@@ -13,13 +13,14 @@ export async function restoreKeys(
   // let sigobj = (JSON.parse(sig));
   // sigobj = Object.values(sigobj);
   //console.log(sigobj);
+  console.log(pvk, userdetails, sig);
   const encuserobj: userdetails = {
     ...userdetails,
     ...{ nickname: encodeURI(userdetails.nickname) },
   };
   let priv: CryptoKey = await window.crypto.subtle.importKey(
     "jwk",
-    JSON.parse(pvk) as JsonWebKey,
+    pvk as JsonWebKey,
     {
       name: "ECDSA",
       namedCurve: "P-384",
@@ -39,7 +40,7 @@ export async function restoreKeys(
   try {
     await writeKey(
       priv,
-      encuserobj,
+      userdetails,
       sig,
     );
   } catch {
@@ -79,14 +80,16 @@ export async function generateAndWriteKeys(name: string) {
     keyPair.privateKey,
     new TextEncoder().encode(JSON.stringify(userdetails)),
   );
+  const uint8Signature = new Uint8Array(userSignature);
   try {
     const neKP = await nonExportableKeyPairs;
     const regresult: boolean = await registerKeyPair(publicKey, userdetails);
+    // const regresult = true;
     if (regresult) {
       await writeKey(
         neKP.privateKey,
         userdetails,
-        userSignature,
+        uint8Signature,
       );
     } else {
       throw new Error("Account exists");
@@ -95,11 +98,10 @@ export async function generateAndWriteKeys(name: string) {
     //console.log(e);
     throw new Error(e);
   }
-  const signArray = Array.from(new Uint8Array(userSignature));
   return {
-    pvk: JSON.stringify(privateKey),
-    userdetails: JSON.stringify(userdetails),
-    sig: JSON.stringify(signArray),
+    privateKey,
+    userdetails,
+    uint8Signature,
   };
 }
 
@@ -130,7 +132,7 @@ async function makeKeysNonExportable(jwkpriv, jwkpub) {
 async function writeKey(
   key: CryptoKey,
   name: userdetails,
-  signature: ArrayBuffer,
+  signature: Uint8Array,
 ) {
   return new Promise<boolean>(async (resolve, reject) => {
     const db = await getKeyPairDatabase();
