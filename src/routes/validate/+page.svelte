@@ -56,7 +56,7 @@
 
 {#if submitting}
 	<div
-		class="w-full h-1 bg-gradient-to-r from-transparent via-lime-400 to-transparent background-animate"
+		class="w-full h-2 bg-gradient-to-r from-transparent via-lime-400 to-transparent background-animate absolute top-0"
 	/>
 {/if}
 <section class="text-zinc-50 ">
