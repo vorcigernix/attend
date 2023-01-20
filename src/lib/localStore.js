@@ -7,8 +7,7 @@ export const userInfo = writable();
 let userInfoDetails;
 
 if (browser) {
-    userInfoDetails = await validateSignature(); //|| null;
-    //console.log(userInfoDetails);
+    userInfoDetails = await validateSignature();
     if (userInfoDetails.valid)
         userInfo.set(userInfoDetails);
 }

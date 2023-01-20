@@ -1,5 +1,5 @@
 <script>
-	import { generateAndWriteKeys, restoreKeys } from '$lib/utils/indexedDBUtil';
+	import { generateAndWriteKeys, restoreKeys, validateSignature } from '$lib/utils/indexedDBUtil';
 	import { browser } from '$app/environment';
 	import { userInfo } from '$lib/localStore.js';
 	let name = '';
@@ -8,6 +8,7 @@
 	$: submitting = false;
 	let restoreObj = null;
 	let files = null;
+	let validated = false;
 
 	$: if (files) {
 		const fileText = files[0].text();
@@ -37,14 +38,28 @@
 			console.info('Issue in generating or storing keys:', e);
 			existingUser = true;
 		}
+		const interval = setInterval(revalidate, 5000);
+		//console.log("s",$userInfo,"fn", userInfoDetails)
 		submitting = false;
-		// const dec = new TextDecoder().decode(eckey);
-		// console.log(JSON.parse(dec));
 		return;
+	}
+	async function revalidate() {
+		const userInfoDetails = await validateSignature();
+		userInfo.set(userInfoDetails);
+		if (userInfoDetails.valid)
+			return () => {
+				validated = true;
+				clearInterval(interval);
+			};
 	}
 </script>
 
-<section class="text-zinc-50">
+{#if submitting}
+	<div
+		class="w-full h-1 bg-gradient-to-r from-transparent via-lime-400 to-transparent background-animate"
+	/>
+{/if}
+<section class="text-zinc-50 ">
 	<div
 		class="container flex flex-col justify-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between"
 	>
@@ -64,6 +79,11 @@
 						alt="illustration"
 						class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128"
 					/>
+					{#if validated}
+						<div class="text-sm mb-1 font-bold">Congratz, you've been validated.</div>
+					{:else}
+						<div class="text-sm mb-1 font-bold">We are validating your authenticity.</div>
+					{/if}
 					<div
 						class="inline-flex items-center divide-x rounded-full bg-lime-400 text-zinc-800 divide-gray-700"
 					>
@@ -72,7 +92,7 @@
 							href="data:application/octet-stream,{eckey}"
 							class="font-bold inline-flex items-center py-2 px-6 hover:bg-lime-600 text-sm md:text-base hover:rounded-full"
 						>
-							Download key backup
+							Download the backup key
 						</a>
 					</div>
 				</div>

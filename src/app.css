@@ -13,7 +13,7 @@ body {
 }
 
 .background-animate {
-    background-size: 400%;
+    background-size: 1000%;
 
     -webkit-animation: LoadingAnimation 3s ease infinite;
     -moz-animation: LoadingAnimation 3s ease infinite;
